@@ -37,13 +37,12 @@ model User {
   isVerify             Boolean               @default(false) @map("is_verify")
   role                 Role                  @default(USER)
   lineToken            String?               @map("line_token")
-  password             String                @db.VarChar(60)
+  password             String?               @db.VarChar(60)
   gender               Gender
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamp(0)
   UserAddress          UserAddress?
   OrganizerInformation OrganizerInformation?
-  Event                Event[]
   report               Report[]
   Reminder             Reminder[]
   EventFeedback        EventFeedback[]
@@ -73,45 +72,47 @@ model OrganizerInformation {
   user              User        @relation(fields: [userId], references: [id])
   officialName      String      @map("official_name")
   corporation       Corporation @default(INDIVIDUAL)
-  companyNumber     Int?        @map("company_number")
-  identityCopyImage String      @map("identity_copy_image")
+  companyNumber     Int?        @map("company_number") 
+  identityCopyImage String?      @map("identity_copy_image")
   profileImage      String?     @map("profile_image")
   createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamp(0)
+  Event             Event[]
 
   @@map("organizer_information")
 }
 
 model Event {
-  id             Int             @id @default(autoincrement())
-  organizerId    Int             @map("organizer_id")
-  organizer      User            @relation(fields: [organizerId], references: [id])
-  coverImage     String          @map("cover_image")
-  title          String
-  description    String?         @db.Text
-  startDate      DateTime        @map("start_date") @db.Date
-  endDate        DateTime        @map("end_date") @db.Date
-  timePeriod     String          @map("time_period") @db.VarChar(20)
-  isYearly       Boolean         @default(false) @map("is_yearly")
-  isPublish      Boolean         @default(false) @map("is_publish")
-  themeId        Int?            @map("theme_id")
-  theme          Theme?          @relation(fields: [themeId], references: [id])
-  eventTypeId    Int             @map("event_type_id")
-  eventType      EventType       @relation(fields: [eventTypeId], references: [id])
-  isExpire       Boolean         @default(false) @map("is_expire")
-  telNumber      String?         @map("tel_number")
-  website        String?
-  email          String?
-  facebook       String?
-  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamp(0)
-  EventImage     EventImage[]
-  EventAddress   EventAddress?
-  HighlightEvent HighlightEvent?
-  report         Report[]
-  Reminder       Reminder[]
-  EventFeedback  EventFeedback[]
-  EventFacility  EventFacility?
+  id                     Int                  @id @default(autoincrement())
+  organizerInformationId Int                  @map("organizer_id")
+  organizerInformation   OrganizerInformation @relation(fields: [organizerInformationId], references: [id])
+  coverImage             String               @map("cover_image")
+  title                  String
+  description            String?              @db.Text
+  startDate              DateTime             @map("start_date") @db.Date
+  endDate                DateTime             @map("end_date") @db.Date
+  timePeriod             String               @map("time_period") @db.VarChar(20)
+  isYearly               Boolean              @default(false) @map("is_yearly")
+  isPublish              Boolean              @default(false) @map("is_publish")
+  themeId                Int?                 @map("theme_id")
+  theme                  Theme?               @relation(fields: [themeId], references: [id])
+  eventTypeId            Int                  @map("event_type_id")
+  eventType              EventType            @relation(fields: [eventTypeId], references: [id])
+  isExpire               Boolean              @default(false) @map("is_expire")
+  telNumber              String?              @map("tel_number")
+  website                String?
+  email                  String?
+  facebook               String?
+  createdAt              DateTime             @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt              DateTime             @updatedAt @map("updated_at") @db.Timestamp(0)
+  EventImage             EventImage[]
+  EventAddress           EventAddress?
+  HighlightEvent         HighlightEvent?
+  report                 Report[]
+  Reminder               Reminder[]
+  EventFeedback          EventFeedback[]
+  EventFacility          EventFacility?
+
 
   @@map("events")
 }
