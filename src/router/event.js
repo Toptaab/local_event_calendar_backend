@@ -5,5 +5,7 @@ const authenticate = require("../middlewares/authenticate")
 
 const eventRoute = express.Router()
 
+eventRoute.get('/',c.event.getAll)
+
 
 module.exports = eventRoute
