@@ -1,15 +1,11 @@
 const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
+const catchError = require("../utils/catchError")
 
 
 
-module.exports.getAll = async (req,res,next) => {
-    try {
-        const allEvent = await repo.event.getAll()
-        
-        res.status(200).json(allEvent)
-    } catch (error) {
-        next(err)
-    }
-}
+exports.getAll = utils.catchError(async (req, res, next) => {
+    const allEvent = await repo.event.getAll()
+    res.status(200).json(allEvent)
+})
