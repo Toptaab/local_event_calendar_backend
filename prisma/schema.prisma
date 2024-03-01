@@ -13,243 +13,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id              String   @id @default(uuid())
+  username        String   @unique
+  password        String
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  firstName       String   @map("first_name")
+  lastName        String   @map("last_name")
+  phoneNumber     String?  @map("phone_number")
+  profileImageUrl String?  @map("profile_image_url")
+  birthDate       String?  @map("birth_date")
+  gender          Gender   @default(MALE)
+  role            Role
+}
+
 enum Role {
   USER
   ADMIN
-  ORGANIZER
 }
 
 enum Gender {
   MALE
   FEMALE
-  OTHER
-}
-
-enum Corporation {
-  INDIVIDUAL
-  CORPORATION
-}
-
-model User {
-  id                   Int                   @id @default(autoincrement())
-  userName             String                @map("user_name") @db.VarChar(40)
-  email                String
-  isVerify             Boolean               @default(false) @map("is_verify")
-  role                 Role                  @default(USER)
-  lineToken            String?               @map("line_token")
-  password             String?               @db.VarChar(60)
-  gender               Gender
-  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamp(0)
-  UserAddress          UserAddress?
-  OrganizerInformation OrganizerInformation?
-  report               Report[]
-  Reminder             Reminder[]
-  EventFeedback        EventFeedback[]
-
-  @@map("users")
-}
-
-model UserAddress {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique @map("user_id")
-  user      User     @relation(fields: [userId], references: [id])
-  address   String?
-  address2  String?
-  proviceId Int
-  provice   Province @relation(fields: [proviceId], references: [id])
-
-  @@map("user_address")
-}
-
-model OrganizerInformation {
-  id                Int         @id @default(autoincrement())
-  userId            Int         @unique @map("user_id")
-  user              User        @relation(fields: [userId], references: [id])
-  officialName      String      @map("official_name")
-  corporation       Corporation @default(INDIVIDUAL)
-  companyNumber     Int?        @map("company_number")
-  identityCopyImage String?     @map("identity_copy_image")
-  profileImage      String?     @map("profile_image")
-  createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamp(0)
-  Event             Event[]
-
-  @@map("organizer_information")
-}
-
-model Event {
-  id                     Int                  @id @default(autoincrement())
-  organizerInformationId Int                  @map("organizerInformation_id")
-  organizerInformation   OrganizerInformation @relation(fields: [organizerInformationId], references: [id])
-  coverImage             String               @map("cover_image")
-  title                  String
-  description            String?              @db.Text
-  startDate              DateTime             @map("start_date") @db.DateTime()
-  endDate                DateTime             @map("end_date") @db.DateTime()
-  timePeriod             String               @map("time_period") @db.VarChar(20)
-  isYearly               Boolean              @default(false) @map("is_yearly")
-  isPublish              Boolean              @default(false) @map("is_publish")
-  themeId                Int?                 @map("theme_id")
-  theme                  Theme?               @relation(fields: [themeId], references: [id])
-  eventTypeId            Int                  @map("event_type_id")
-  eventType              EventType            @relation(fields: [eventTypeId], references: [id])
-  isExpire               Boolean              @default(false) @map("is_expire")
-  telNumber              String?              @map("tel_number")
-  website                String?
-  email                  String?
-  facebook               String?
-  createdAt              DateTime             @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt              DateTime             @updatedAt @map("updated_at") @db.Timestamp(0)
-  EventImage             EventImage[]
-  EventAddress           EventAddress?
-  HighlightEvent         HighlightEvent?
-  report                 Report[]
-  Reminder               Reminder[]
-  EventFeedback          EventFeedback[]
-  EventFacility          EventFacility?
-
-  @@map("events")
-}
-
-model EventAddress {
-  id         Int      @id @default(autoincrement())
-  eventId    Int      @unique
-  event      Event    @relation(fields: [eventId], references: [id])
-  address    String?
-  address2   String?
-  provinceId Int      @map("province_id")
-  province   Province @relation(fields: [provinceId], references: [id])
-  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
-  lat        Decimal  @db.Decimal(8, 4)
-  long       Decimal  @db.Decimal(8, 4)
-
-  @@map("event_address")
-}
-
-model EventImage {
-  id      Int    @id @default(autoincrement())
-  eventId Int    @map("event_id")
-  event   Event  @relation(fields: [eventId], references: [id])
-  image   String
-
-  @@map("event_images")
-}
-
-model EventType {
-  id    Int     @id @default(autoincrement())
-  name  String
-  Event Event[]
-
-  @@map("event_types")
-}
-
-model Theme {
-  id    Int     @id @default(autoincrement())
-  name  String
-  Event Event[]
-
-  @@map("themes")
-}
-
-model EventFacility {
-  id             Int     @id @default(autoincrement())
-  eventId        Int     @unique @map("event_id")
-  event          Event   @relation(fields: [eventId], references: [id])
-  parking        Boolean @default(false)
-  toilet         Boolean @default(false)
-  meditationRoom Boolean @default(false) @map("meditation_room")
-  food           Boolean @default(false)
-  entranceFee    Boolean @default(false) @map("entrance_fee")
-  wifi           Boolean @default(false)
-  medicalService Boolean @default(false) @map("medical_service")
-  petFriend      Boolean @default(false) @map("pet_friendly")
-
-  @@map("event_facility")
-}
-
-model HighlightEvent {
-  id      Int   @id @default(autoincrement())
-  eventId Int   @unique @map("event_id")
-  event   Event @relation(fields: [eventId], references: [id])
-
-  @@map("highlight_event")
-}
-
-model Report {
-  id           Int    @id @default(autoincrement())
-  userId       Int    @map("user_id")
-  user         User   @relation(fields: [userId], references: [id])
-  eventId      Int    @map("event_id")
-  event        Event  @relation(fields: [eventId], references: [id])
-  reportTypeId Int    @map("report_type_id")
-  content      String @db.Text
-
-  @@map("reports")
-}
-
-model ReportTpye {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  @@map("report_types")
-}
-
-model EventFeedback {
-  id      Int    @id @default(autoincrement())
-  userId  Int    @map("user_id")
-  user    User   @relation(fields: [userId], references: [id])
-  eventId Int    @map("event_id")
-  event   Event  @relation(fields: [eventId], references: [id])
-  content String @db.Text
-
-  @@map("event_feedback")
-}
-
-model Reminder {
-  id      Int   @id @default(autoincrement())
-  userId  Int   @map("user_id")
-  user    User  @relation(fields: [userId], references: [id])
-  eventId Int   @map("event_id")
-  event   Event @relation(fields: [eventId], references: [id])
-
-  @@map("reminders")
-}
-
-model Province {
-  id             Int            @id @default(autoincrement())
-  provinceNameTh String         @map("province_name_th")
-  provinceNameEn String         @map("province_name_en")
-  UserAddresses  UserAddress[]
-  EventAddresses EventAddress[]
-  Districts      District[]
-  SubDistricts   SubDistrict[]
-
-  @@map("provinces")
-}
-
-model District {
-  id             Int           @id @default(autoincrement())
-  provinceId     Int           @map("province_id")
-  province       Province      @relation(fields: [provinceId], references: [id])
-  districtNameTh String        @map("district_name_th")
-  districtNameEn String        @map("district_name_en")
-  postalCode     Decimal       @db.Decimal(5, 0)
-  SubDistricts   SubDistrict[]
-
-  @@map("districts")
-}
-
-model SubDistrict {
-  id                Int      @id @default(autoincrement())
-  districtId        Int      @map("district_id")
-  district          District @relation(fields: [districtId], references: [id])
-  provinceId        Int      @map("province_id")
-  province          Province @relation(fields: [provinceId], references: [id])
-  subdistrictNameTh String   @map("sub_district_name_th")
-  subdistrictNameEn String   @map("sub_district_name_en")
-  postalCode        Decimal  @db.Decimal(5, 0)
-
-  @@map("sub_districts")
 }
