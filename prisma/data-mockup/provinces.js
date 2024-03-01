@@ -1,5 +1,5 @@
-exports.province = [
-    {name: "Bangkok"},
+module.exports = provinces = [
+    { name: "Bangkok" },
     { name: "Phuket" },
     { name: "Chiang Mai" },
     { name: "Krabi" },
@@ -76,6 +76,4 @@ exports.province = [
     { name: "Tak" },
     { name: "Sing Buri" },
     { name: "Trat" },
-  ];
-  
-
+]
