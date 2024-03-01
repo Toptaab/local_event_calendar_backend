@@ -12,21 +12,30 @@ module.exports.getAll = async (req, res, next) => {
     }
     return
 }
+
+
+
 module.exports.get = async (req, res, next) => {
     try {
-        const { id } = req.params
-        const user = await repo.user.get({ id })
+        const { id  } = req.params
+
+        const user = await repo.user.get({ id:+id })
         res.status(200).json({ user })
     } catch (err) {
         next(err)
     }
     return
 }
+
+
+
+
 module.exports.login = async (req, res, next) => {
     try {
-        const { username, password } = req.body
+        const { email, password } = req.body
+
         // GET username from database
-        const user = await repo.user.get({ username })
+        const user = await repo.user.get({ email })
         if (!user) throw new CustomError("username or password is wrong", "WRONG_INPUT", 400)
 
         // COMPARE password with database

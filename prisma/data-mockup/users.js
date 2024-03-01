@@ -1,9 +1,8 @@
-const bcrypt = require("bcryptjs")
+const utils = require("../../src/utils")
 
 password = "123456"
 
-hashPassword = bcrypt.hashSync(password, 10)
-
+hashPassword = utils.bcrypt.hashedsync(password)
 
 
 const ROLE = {
