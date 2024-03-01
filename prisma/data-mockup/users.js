@@ -18,7 +18,7 @@ const GENDER = {
     OTHER: "OTHER",
 }
 
-modules.exports = user = [
+module.exports = user = [
     {
         userName: "toptaab", //1
         email: "toptaab@gmail.com",

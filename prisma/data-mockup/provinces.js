@@ -1,4 +1,4 @@
-module.exports = province = [
+module.exports = provinces = [
     { name: "Bangkok" },
     { name: "Phuket" },
     { name: "Chiang Mai" },

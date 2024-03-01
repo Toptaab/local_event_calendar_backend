@@ -1,4 +1,4 @@
-modules.exports = eventAddress = [
+module.exports = eventAddress = [
     { eventId: 1, address: "123 Main Street, Bangkok", provinceId: 1, lat: 13.7563, long: 100.5018 },
     { eventId: 2, address: "456 Elm Street, Phuket", provinceId: 2, lat: 7.8804, long: 98.3923 },
     { eventId: 3, address: "789 Oak Street, Chiang Mai", provinceId: 3, lat: 18.7903, long: 98.9847 },

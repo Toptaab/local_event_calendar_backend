@@ -1,4 +1,4 @@
-modules.exports = eventImage = [
+module.exports = eventImage = [
     {
         eventId: 1,
         image: "https://picsum.photos/600/600",

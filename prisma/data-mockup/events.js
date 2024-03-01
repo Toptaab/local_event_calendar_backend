@@ -1,4 +1,4 @@
-modules.exports = events = [
+module.exports = events = [
     {
         organizerInformationId: 1,
         coverImage: "https://picsum.photos/600/300",

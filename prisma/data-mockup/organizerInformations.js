@@ -8,7 +8,7 @@ const identityImage = "https://www.dmv.ca.gov/portal/uploads/2020/06/realid_img-
 
 
 
-modules.exports = organizerInformation = [
+module.exports = organizerInformation = [
     {
         userId: 1,
         officialName: "Top Thailand",
