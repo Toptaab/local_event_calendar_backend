@@ -1,7 +1,7 @@
 module.exports = events = [
     {
         organizerInformationId: 1,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Watarun",
         description: "the best wat in thailand",
         startDate: new Date("2024-10-03"),
@@ -14,7 +14,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 2,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Adventure Fest",
         description: "Explore the wonders of nature",
         startDate: new Date("2024-08-10"),
@@ -27,7 +27,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 3,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Culinary Delight",
         description: "A feast for food lovers",
         startDate: new Date("2024-07-12"),
@@ -40,7 +40,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 4,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Tech Expo",
         description: "Innovations that shape the future",
         startDate: new Date("2024-09-08"),
@@ -53,7 +53,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 5,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Fusion Beats",
         description: "A musical journey across genres",
         startDate: new Date("2024-11-15"),
@@ -66,7 +66,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 6,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Artistic Vibes",
         description: "Celebrating creativity in all forms",
         startDate: new Date("2024-06-09"),
@@ -79,7 +79,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 1,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Mindful Retreat",
         description: "Embrace tranquility and peace",
         startDate: new Date("2024-04-11"),
@@ -92,7 +92,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 2,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Gastronomy Gala",
         description: "A culinary journey around the world",
         startDate: new Date("2024-12-14"),
@@ -105,7 +105,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 3,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Code Confluence",
         description: "Where coding brilliance meets",
         startDate: new Date("2024-03-13"),
@@ -118,7 +118,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 4,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Fashion Fiesta",
         description: "A showcase of style and trends",
         startDate: new Date("2024-02-16"),
@@ -131,7 +131,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 5,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Health Harmony",
         description: "Wellness for mind and body",
         startDate: new Date("2024-05-10"),
@@ -144,7 +144,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 6,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Cultural Carnival",
         description: "Diverse traditions under one roof",
         startDate: new Date("2024-07-12"),
@@ -157,7 +157,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 1,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Tech Summit",
         description: "Exploring the future of technology",
         startDate: new Date("2024-09-08"),
@@ -170,7 +170,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 1,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Watarun",
         description: "the best wat in thailand",
         startDate: new Date("2024-10-03"),
@@ -183,7 +183,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 2,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Adventure Fest",
         description: "Explore the wonders of nature",
         startDate: new Date("2024-08-10"),
@@ -196,7 +196,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 3,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Culinary Delight",
         description: "A feast for food lovers",
         startDate: new Date("2024-07-12"),
@@ -209,7 +209,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 4,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Tech Expo",
         description: "Innovations that shape the future",
         startDate: new Date("2024-09-08"),
@@ -222,7 +222,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 5,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Fusion Beats",
         description: "A musical journey across genres",
         startDate: new Date("2024-11-15"),
@@ -235,7 +235,7 @@ module.exports = events = [
     },
     {
         organizerInformationId: 6,
-        coverImage: "https://picsum.photos/600/300",
+        coverImage: "https://picsum.photos/600/600?random=1",
         title: "Artistic Vibes",
         description: "Celebrating creativity in all forms",
         startDate: new Date("2024-06-09"),
