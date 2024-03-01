@@ -51,17 +51,13 @@ model User {
 }
 
 model UserAddress {
-  id           Int         @id @default(autoincrement())
-  userId       Int         @unique @map("user_id")
-  user         User        @relation(fields: [userId], references: [id])
-  address      String?
-  address2     String?
-  proviceId    Int
-  provice      Province    @relation(fields: [proviceId], references: [id])
-  distictId    Int
-  district     District    @relation(fields: [distictId], references: [id])
-  subDistictId Int
-  subDistrict  SubDistrict @relation(fields: [subDistictId], references: [id])
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  address   String?
+  address2  String?
+  proviceId Int
+  provice   Province @relation(fields: [proviceId], references: [id])
 
   @@map("user_address")
 }
@@ -72,8 +68,8 @@ model OrganizerInformation {
   user              User        @relation(fields: [userId], references: [id])
   officialName      String      @map("official_name")
   corporation       Corporation @default(INDIVIDUAL)
-  companyNumber     Int?        @map("company_number") 
-  identityCopyImage String?      @map("identity_copy_image")
+  companyNumber     Int?        @map("company_number")
+  identityCopyImage String?     @map("identity_copy_image")
   profileImage      String?     @map("profile_image")
   createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamp(0)
@@ -84,13 +80,13 @@ model OrganizerInformation {
 
 model Event {
   id                     Int                  @id @default(autoincrement())
-  organizerInformationId Int                  @map("organizer_id")
+  organizerInformationId Int                  @map("organizerInformation_id")
   organizerInformation   OrganizerInformation @relation(fields: [organizerInformationId], references: [id])
   coverImage             String               @map("cover_image")
   title                  String
   description            String?              @db.Text
-  startDate              DateTime             @map("start_date") @db.Date
-  endDate                DateTime             @map("end_date") @db.Date
+  startDate              DateTime             @map("start_date") @db.DateTime()
+  endDate                DateTime             @map("end_date") @db.DateTime()
   timePeriod             String               @map("time_period") @db.VarChar(20)
   isYearly               Boolean              @default(false) @map("is_yearly")
   isPublish              Boolean              @default(false) @map("is_publish")
@@ -113,26 +109,21 @@ model Event {
   EventFeedback          EventFeedback[]
   EventFacility          EventFacility?
 
-
   @@map("events")
 }
 
 model EventAddress {
-  id           Int         @id @default(autoincrement())
-  eventId      Int         @unique
-  event        Event       @relation(fields: [eventId], references: [id])
-  address      String?
-  address2     String?
-  proviceId    Int         @map("provice_id")
-  provice      Province    @relation(fields: [proviceId], references: [id])
-  distictId    Int         @map("dictrict_id")
-  district     District    @relation(fields: [distictId], references: [id])
-  subDistictId Int         @map("sub_district_id")
-  subDistrict  SubDistrict @relation(fields: [subDistictId], references: [id])
-  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt    DateTime    @updatedAt @map("updated_at") @db.Timestamp(0)
-  lat          String?
-  long         String?
+  id         Int      @id @default(autoincrement())
+  eventId    Int      @unique
+  event      Event    @relation(fields: [eventId], references: [id])
+  address    String?
+  address2   String?
+  provinceId Int      @map("provice_id")
+  province   Province @relation(fields: [provinceId], references: [id])
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  lat        Decimal  @db.Decimal(8,4)
+  long       Decimal  @db.Decimal(8,4)
 
   @@map("event_address")
 }
@@ -189,34 +180,10 @@ model HighlightEvent {
 model Province {
   id           Int            @id @default(autoincrement())
   name         String
-  District     District[]
   UserAddress  UserAddress[]
   EventAddress EventAddress[]
 
   @@map("provinces")
-}
-
-model District {
-  id           Int            @id @default(autoincrement())
-  provinceId   Int            @map("provice_id")
-  provice      Province       @relation(fields: [provinceId], references: [id])
-  name         String
-  SubDistrict  SubDistrict[]
-  UserAddress  UserAddress[]
-  EventAddress EventAddress[]
-
-  @@map("districts")
-}
-
-model SubDistrict {
-  id           Int            @id @default(autoincrement())
-  name         String
-  DistrictId   Int            @map("district_id")
-  district     District       @relation(fields: [DistrictId], references: [id])
-  UserAddress  UserAddress[]
-  EventAddress EventAddress[]
-
-  @@map("sub_districts")
 }
 
 model Report {

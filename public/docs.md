@@ -6,7 +6,7 @@ POST user/register   register a new user ### for user
 REQUEST BODY
 {
   userName          string    user first name
-  email            string     email address
+  email             string    email address
   password          string    password must contain only alphabet ** if user register by email"
   role              string    USER
   lineToken         string    lineToken form line api ** if user register by line (don't need password)**
@@ -117,23 +117,57 @@ BODY
 
 
 ####  event  #####
-GET event/                      get allEvent
+GET event/                    get allEvent
 RESPONSE
 201
+    [
+      event                   object      {id, coverImage, title, description, startDate, endDate, timePeriod, isYearly, isPublish,isExpire, telNumber, website, email, facebook,   }
+      EventAddress            object      {officialName, profileImage}
+      organizerInformation    object      {officialName, profileImage}
+      HighlightEvent?         object
+      EventFacility           object
+      eventType               object      {name}
+    ]
+
+ 
+
+
+GET event/:eventId            get event by eventId
+RESPONSE
+200
     {
-        
+      event                   object    {id, coverImage, title, description, startDate, endDate, timePeriod, isYearly, isPublish,isExpire, telNumber, website, email, facebook,   }
+      EventImage              array
+      EventAddress            object
+      organizerInformation    object    {officialName, profileImage}
+      HighlightEvent?         object    
+      EventFacility           object    
+      <!-- UserAddress?            object    {address, address2, provice, district, subDistrict} -->
+      OrganizerInformation?   object    {officialName, corporation, companyNumber, profileImage}
+      eventType               object    {name}
+      report                  array
     }
 
 
+POST event/                   create new Event
+REQUEST
+HEADER
+  AUTHORIZATION           Bearer [JWT]
+BODY
+{
+  organizerInformationId      number
+  coverImage                  string
+  title                       string
+  description?                string
+  startDate                   datetime
+  endDate                     datetime
+  isYearly                    boolean
+  isPublic                    boolean
+  eventTypeId                 number
+  telNumber?                  string
+  website
+}
 
 
-GET event/:eventId                          get user OrganizerInformation
-RESPONSE
-201
-    {
-    user                        object    {userName, email,isVerify, role, lineToken, gender} 
-    UserAddress?                object    {address, address2, provice, district, subDistrict}
-    OrganizerInformation?       object    {officialName, corporation, companyNumber, profileImage}
-    }
 
 
