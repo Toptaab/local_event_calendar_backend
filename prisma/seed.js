@@ -5,6 +5,8 @@ const data = require("./data-mockup")
 async function seeding() {
     // ================================= Constants data ===============================//
     await prisma.province.createMany({ data: data.province })
+    await prisma.district.createMany({ data: data.district })
+    await prisma.subDistrict.createMany({ data: data.subDistrict })
     await prisma.eventType.createMany({ data: data.eventType })
     // ================================= Constants data ===============================//
 
@@ -14,6 +16,7 @@ async function seeding() {
     await prisma.event.createMany({ data: data.event })
     await prisma.eventAddress.createMany({ data: data.eventAddress })
     await prisma.eventImage.createMany({ data: data.eventImage })
+    await prisma.eventFacility.createMany({ data: data.eventFacility })
     // ================================= mockupdata ===============================//
 }
 

@@ -118,12 +118,12 @@ model EventAddress {
   event      Event    @relation(fields: [eventId], references: [id])
   address    String?
   address2   String?
-  provinceId Int      @map("provice_id")
+  provinceId Int      @map("province_id")
   province   Province @relation(fields: [provinceId], references: [id])
   createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
-  lat        Decimal  @db.Decimal(8,4)
-  long       Decimal  @db.Decimal(8,4)
+  lat        Decimal  @db.Decimal(8, 4)
+  long       Decimal  @db.Decimal(8, 4)
 
   @@map("event_address")
 }
@@ -177,15 +177,6 @@ model HighlightEvent {
   @@map("highlight_event")
 }
 
-model Province {
-  id           Int            @id @default(autoincrement())
-  name         String
-  UserAddress  UserAddress[]
-  EventAddress EventAddress[]
-
-  @@map("provinces")
-}
-
 model Report {
   id           Int    @id @default(autoincrement())
   userId       Int    @map("user_id")
@@ -224,4 +215,41 @@ model Reminder {
   event   Event @relation(fields: [eventId], references: [id])
 
   @@map("reminders")
+}
+
+model Province {
+  id             Int            @id @default(autoincrement())
+  provinceNameTh String         @map("province_name_th")
+  provinceNameEn String         @map("province_name_en")
+  UserAddresses  UserAddress[]
+  EventAddresses EventAddress[]
+  Districts      District[]
+  SubDistricts   SubDistrict[]
+
+  @@map("provinces")
+}
+
+model District {
+  id             Int           @id @default(autoincrement())
+  provinceId     Int           @map("province_id")
+  province       Province      @relation(fields: [provinceId], references: [id])
+  districtNameTh String        @map("district_name_th")
+  districtNameEn String        @map("district_name_en")
+  postalCode     Decimal       @db.Decimal(5, 0)
+  SubDistricts   SubDistrict[]
+
+  @@map("districts")
+}
+
+model SubDistrict {
+  id                Int      @id @default(autoincrement())
+  districtId        Int      @map("district_id")
+  district          District @relation(fields: [districtId], references: [id])
+  provinceId        Int      @map("province_id")
+  province          Province @relation(fields: [provinceId], references: [id])
+  subdistrictNameTh String   @map("sub_district_name_th")
+  subdistrictNameEn String   @map("sub_district_name_en")
+  postalCode        Decimal  @db.Decimal(5, 0)
+
+  @@map("sub_districts")
 }
