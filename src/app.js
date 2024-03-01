@@ -19,7 +19,7 @@ const server = http.createServer(app)
 restApiServer(app)
 
 //=====================================================Listening Zone
-console.log(`API DOCS ON:  http://${host}:${port}/docs`)
+console.log(`API DOCS ON:  http://${host}:${port}/docs.md`)
 server.listen(+port, host, () => {
     console.log(`Server is running at http://${host}:${port}`)
 })

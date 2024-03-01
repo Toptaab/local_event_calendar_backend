@@ -3,6 +3,9 @@ const express = require("express")
 const { json, urlencoded } = require("express")
 const cors = require("cors")
 const morgan = require("morgan")
+// const bodyParser = require("body-parser")
+
+
 
 //=====================================================local consted Zone
 
@@ -10,6 +13,9 @@ const { notFound } = require("../middlewares/notFound")
 const { errorMiddlewares } = require("../middlewares/error")
 const CustomError = require("../config/error")
 const userRoute = require("../router/user")
+const eventRoute = require("../router/event")
+
+
 
 //=====================================================Server Zone
 module.exports = function restApiServer(app) {
@@ -29,7 +35,11 @@ module.exports = function restApiServer(app) {
             next(new CustomError("Ping Error", "NotFoundData", 500))
         }
     })
+
     app.use("/user", userRoute)
+    app.use("/event", eventRoute)
+
+
 
     //=====================================================Throwing Zone
     app.use(notFound)
