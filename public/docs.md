@@ -155,7 +155,17 @@ HEADER
   AUTHORIZATION           Bearer [JWT]
 BODY
 {
-  
+  organizerInformationId      number
+  coverImage                  string
+  title                       string
+  description?                string
+  startDate                   datetime
+  endDate                     datetime
+  isYearly                    boolean
+  isPublic                    boolean
+  eventTypeId                 number
+  telNumber?                  string
+  website
 }
 
 
