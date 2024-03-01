@@ -122,10 +122,11 @@ RESPONSE
 201
     [
       event                   object      {id, coverImage, title, description, startDate, endDate, timePeriod, isYearly, isPublish,isExpire, telNumber, website, email, facebook,   }
-      EventAddress            object      
+      EventAddress            object      {officialName, profileImage}
       organizerInformation    object      {officialName, profileImage}
       HighlightEvent?         object
       EventFacility           object
+      eventType               object      {name}
     ]
 
  
@@ -133,31 +134,30 @@ RESPONSE
 
 GET event/:eventId            get event by eventId
 RESPONSE
-201
+200
     {
       event                   object    {id, coverImage, title, description, startDate, endDate, timePeriod, isYearly, isPublish,isExpire, telNumber, website, email, facebook,   }
       EventImage              array
       EventAddress            object
-      organizerInformation    object
+      organizerInformation    object    {officialName, profileImage}
       HighlightEvent?         object    
       EventFacility           object    
-      UserAddress?            object    {address, address2, provice, district, subDistrict}
+      <!-- UserAddress?            object    {address, address2, provice, district, subDistrict} -->
       OrganizerInformation?   object    {officialName, corporation, companyNumber, profileImage}
+      eventType               object    {name}
+      report                  array
     }
 
 
-  GET event/organizer/:organizerId            get event by organizerId
-RESPONSE
-201
-    [
-      event                   object    {id, coverImage, title, description, startDate, endDate, timePeriod, isYearly, isPublish,isExpire, telNumber, website, email, facebook,   }
-      EventImage              array
-      EventAddress            object
-      organizerInformation    object
-      HighlightEvent?         object    
-      EventFacility           object    
-      UserAddress?            object    {address, address2, provice, district, subDistrict}
-      OrganizerInformation?   object    {officialName, corporation, companyNumber, profileImage}
-    ]
+POST event/                   create new Event
+REQUEST
+HEADER
+  AUTHORIZATION           Bearer [JWT]
+BODY
+{
+  
+}
+
+
 
 

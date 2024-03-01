@@ -9,4 +9,5 @@ eventRoute.get('/',c.event.getAll)
 eventRoute.get('/:eventId',c.event.getEvent)
 
 
+
 module.exports = eventRoute

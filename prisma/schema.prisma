@@ -80,7 +80,7 @@ model OrganizerInformation {
 
 model Event {
   id                     Int                  @id @default(autoincrement())
-  organizerInformationId Int                  @map("organizer_id")
+  organizerInformationId Int                  @map("organizerInformation_id")
   organizerInformation   OrganizerInformation @relation(fields: [organizerInformationId], references: [id])
   coverImage             String               @map("cover_image")
   title                  String
