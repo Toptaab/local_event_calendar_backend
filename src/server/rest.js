@@ -16,6 +16,7 @@ const userRoute = require("../router/user")
 const eventRoute = require("../router/event")
 
 
+
 //=====================================================Server Zone
 module.exports = function restApiServer(app) {
     //=====================================================Encoding Zone
@@ -37,6 +38,7 @@ module.exports = function restApiServer(app) {
 
     app.use("/user", userRoute)
     app.use("/event", eventRoute)
+
 
 
     //=====================================================Throwing Zone

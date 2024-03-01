@@ -2,6 +2,7 @@ const { CustomError } = require("../config/error")
 const { errorRef, httpCode } = require("../constant/error")
 
 module.exports.errorMiddlewares = (err, req, res, _next) => {
+    console.log(err)
     if (err instanceof CustomError) {
         res.status(err.status)
     } else if (err instanceof Error) {
