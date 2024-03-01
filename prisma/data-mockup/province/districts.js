@@ -104,7 +104,7 @@ module.exports = districts = [
 		"districtNameTh": "ธนบุรี",
 		"postalCode": 10600
 	},
-	{
+	{ 
 		"provinceId": 10,
 		"id": 1016,
 		"districtNameEn": "Bangkok Yai",
