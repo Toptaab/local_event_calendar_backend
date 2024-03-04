@@ -8,3 +8,5 @@ module.exports.update = async ({ id }, data) => await prisma.user.update({ where
 module.exports.delete = async ({ id }) => await prisma.user.delete({ where: { id } })
 
 // =========================================== CUSTOM REPOSITORY ===================================
+
+module.exports.createOrganizerInfomation = async (data) => await prisma.organizerInformation.create({data})
