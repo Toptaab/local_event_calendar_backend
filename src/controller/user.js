@@ -2,6 +2,9 @@ const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
+const fs = require("fs")
+
+const localPath = "/local_event_path"
 
 module.exports.getAll = async (req, res, next) => {
     try {
@@ -13,13 +16,11 @@ module.exports.getAll = async (req, res, next) => {
     return
 }
 
-
-
 module.exports.get = async (req, res, next) => {
     try {
-        const { id  } = req.params
+        const { userId } = req.params
 
-        const user = await repo.user.get({ id:+id })
+        const user = await repo.user.get({ id: +userId })
         res.status(200).json({ user })
     } catch (err) {
         next(err)
@@ -27,51 +28,102 @@ module.exports.get = async (req, res, next) => {
     return
 }
 
+module.exports.login = utils.catchError(async (req, res, nexr) => {
+    const { email, password } = req.body
+    // GET username from database
+    const user = await repo.user.get({ email })
+    if (!user) throw new CustomError("username or password is wrong", "WRONG_INPUT", 400)
 
+    // COMPARE password with database
+    const result = await utils.bcrypt.compare(password, user.password)
+    if (!result) throw new CustomError("username or password is wrong", "WRONG_INPUT", 400)
 
+    // DELETE KEY of password from user data
+    delete user.password
+    // SIGN token from user data
+    const token = utils.jwt.sign(user)
+    res.status(200).json({ token })
+})
 
-module.exports.login = async (req, res, next) => {
-    try {
-        const { email, password } = req.body
-
-        // GET username from database
-        const user = await repo.user.get({ email })
-        if (!user) throw new CustomError("username or password is wrong", "WRONG_INPUT", 400)
-
-        // COMPARE password with database
-        const result = await utils.bcrypt.compare(password, user.password)
-        if (!result) throw new CustomError("username or password is wrong", "WRONG_INPUT", 400)
-
-        // DELETE KEY of password from user data
-        delete user.password
-        // SIGN token from user data
-        const token = utils.jwt.sign(user)
-        res.status(200).json({ token })
-    } catch (err) {
-        next(err)
+module.exports.register = utils.catchError(async (req, res, next) => {
+    const { profileImage, identityCopyImage } = req.files
+    const { userName, password, email, lineToken, gender, role } = req.body
+    //GUARD
+    //VALIDATION CONFLICT email
+    const existEmail = await repo.user.get({ email })
+    if (existEmail) {
+        throw new CustomError("this email has aleady been used", "CONFLICT_USER", 400)
     }
-    return
-}
-module.exports.register = async (req, res, next) => {
-    try {
-        const { username, password, firstName, lastName } = req.body
-        let role = Role.USER
-        if (req.body.role != Role.ADMIN) role = Role.ADMIN
-        // HASHED PASSWORD
-        const hashed = await utils.bcrypt.hashed(password)
+    //VALIDATION CONFLICT line token
+    if (lineToken) {
+        const existToken = await repo.user.get({ lineToken })
+        if (existToken) {
+            {
+                throw new CustomError("this line token has aleady been used", "CONFLICT_USER", 400)
+            }
+        }
+    }
+    // HASHED PASSWORD
+    const hashed = await utils.bcrypt.hashed(password)
+
+    //Role case
+    let user
+    let organizer
+    let profileResult
+    let identityCopyImageResult
+
+    // upload profile image
+    if (profileImage) {
+        profileResult = await utils.uploadImage(profileImage[0].path, localPath + "/user-profile")
+    }
+
+    switch (role) {
         // CREATE user to database
-        const user = await repo.user.create({ username, password: hashed, firstName, lastName, role })
-        // DELETE KEY of password from user data
-        delete user.password
-        // SIGN token from user data
-        const token = utils.jwt.sign(user)
+        case Role.USER:
+            user = await repo.user.create({ userName, password: hashed, email, role, gender, profileImage: profileResult.secure_url })
+            break
 
-        res.status(200).json({ token })
-    } catch (err) {
-        next(err)
+        //  CREATE user to database for organizer role
+        case Role.ORGANIZER:
+            user = await repo.user.create({ userName, password: hashed, email, role, gender, profileImage: profileResult.secure_url })
+            const { officialName, corporation, companyNumber } = req.body
+            if (identityCopyImage) {
+                identityCopyImageResult = await utils.uploadImage(identityCopyImage[0].path, localPath + "/company-identity")
+            }
+            organizer = await repo.user.createOrganizerInfomation({
+                userId: +user.id,
+                officialName,
+                corporation,
+                companyNumber: +companyNumber,
+                identityCopyImage: identityCopyImageResult.secure_url,
+            })
+            break
+
+        // CREATE admin to database
+        case Role.ADMIN:
+            user = await repo.user.create({ userName, password: hashed, email, role })
+            break
+        default:
+            throw new CustomError("user role needed", "", 400)
     }
-    return
-}
+
+    // DELETE KEY of password from user data
+    delete user.password
+    // SIGN token from user data
+    const token = utils.jwt.sign(user)
+    let organizerId
+    if (organizer) {
+        organizerId = organizer.id
+    }
+
+    // delete local image
+    fs.unlink(profileImage[0].path, () => {})
+    fs.unlink(identityCopyImage[0].path, () => {})
+    res.status(200).json({ token })
+})
+
+
+
 module.exports.update = async (req, res, next) => {
     try {
         const { id } = req.params
@@ -84,6 +136,8 @@ module.exports.update = async (req, res, next) => {
     }
     return
 }
+
+
 module.exports.delete = async (req, res, next) => {
     try {
         const { id } = req.params

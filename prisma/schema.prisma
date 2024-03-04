@@ -39,6 +39,7 @@ model User {
   lineToken            String?               @map("line_token")
   password             String?               @db.VarChar(60)
   gender               Gender
+  profileImage         String?               @map("profile_image")
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamp(0)
   UserAddress          UserAddress?
@@ -68,9 +69,8 @@ model OrganizerInformation {
   user              User        @relation(fields: [userId], references: [id])
   officialName      String      @map("official_name")
   corporation       Corporation @default(INDIVIDUAL)
-  companyNumber     Int?        @map("company_number")
+  companyNumber     Decimal?    @map("company_number") @db.Decimal(13, 0)
   identityCopyImage String?     @map("identity_copy_image")
-  profileImage      String?     @map("profile_image")
   createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamp(0)
   Event             Event[]

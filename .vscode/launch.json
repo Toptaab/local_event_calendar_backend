@@ -6,7 +6,6 @@
     "configurations": [
         {
             "name": "cc16-group-project-api-template",
-            "preLaunchTask": "eslint",
             "cwd": "${workspaceFolder}/",
             "program": "${workspaceFolder}/src/app.js",
             "request": "launch",
