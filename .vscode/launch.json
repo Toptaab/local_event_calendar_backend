@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "cc16-group-project-api-template",
+            "name": "local_event_calendar_api",
             "cwd": "${workspaceFolder}/",
             "program": "${workspaceFolder}/src/app.js",
             "request": "launch",
