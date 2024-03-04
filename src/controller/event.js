@@ -1,8 +1,7 @@
 const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
-const geolib = require('geolib');
-
+const geolib = require("geolib")
 
 exports.getAll = utils.catchError(async (req, res, next) => {
     const allEvent = await repo.event.getAll()
@@ -14,27 +13,45 @@ exports.getEvent = utils.catchError(async (req, res, next) => {
     res.status(200).json(event)
 })
 
+exports.createEvent = utils.catchError(async (req, res, next) => {})
 
-exports.createEvent = utils.catchError(async (req,res,next) => {
-
-})
-
-
-
-module.exports.getAllWithinRadius = async (req,res,next) => {
+module.exports.getAllWithinRadius = async (req, res, next) => {
     try {
-        // Central point coordinates
-        const centralPoint = { latitude: 40.7128, longitude: -74.0060 };
+        // const { distance, centralPoint } = req.body
+
+        // Central point coordinates \
+        const centralPoint = { latitude: 13.6529, longitude: 100.4887 }
 
         // Distance in meters
-        const distance = 5000; // 5 kilometers
-        const bounds = geolib.getBoundsOfDistance(centralPoint, distance);
-        console.log(bounds);
+        const distance = 5000 // 5 kilometers
 
-        // const allEvent = await repo.event.getAllInScope(bounds)
-        
-        // res.status(200).json(allEvent)
+        //find scope
+        const bounds = geolib.getBoundsOfDistance(centralPoint, distance)
+        console.log(bounds)
+        const { latitude: minLat, longitude: minLon } = bounds[0]
+        const { latitude: maxLat, longitude: maxLon } = bounds[1]
+
+        // console.log(minLat,minLon,maxLat,maxLon);
+
+        const allEvent = await repo.event.getAllInScope({ minLat, minLon, maxLat, maxLon })
+
+        res.status(200).json(allEvent)
     } catch (error) {
-        next(err)
+        next(error)
+    }
+}
+
+module.exports.getAllInScope = async (req, res, next) => {
+    try {
+        const {_southWest, _northEast} = req.body
+        const { lat: minLat, lng: minLon } = _southWest
+        const { lat: maxLat, lng: maxLon } = _northEast
+
+        const allEvent = await repo.event.getAllInScope({ minLat, minLon, maxLat, maxLon })
+        console.log(allEvent);
+
+        res.status(200).json(allEvent)
+    } catch (error) {
+        next(error)
     }
 }
