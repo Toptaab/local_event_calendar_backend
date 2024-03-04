@@ -9,7 +9,7 @@ REQUEST BODY
   email             string    email address
   password          string    password must contain only alphabet ** if user register by email"
   role              string    USER
-  lineToken         string    lineToken form line api ** if user register by line (don't need password)**
+  lineToken?        string    lineToken form line api ** if user register by line (don't need password)**
   gender            enum      {MALE, FEMALE, OTHER}
 
 }
@@ -142,7 +142,7 @@ RESPONSE
       organizerInformation    object    {officialName, profileImage}
       HighlightEvent?         object    
       EventFacility           object    
-      <!-- UserAddress?            object    {address, address2, provice, district, subDistrict} -->
+      <!-- UserAddress?            object    {address, address2, provice, district, subDistrict}  ask for more if needed--> 
       OrganizerInformation?   object    {officialName, corporation, companyNumber, profileImage}
       eventType               object    {name}
       report                  array

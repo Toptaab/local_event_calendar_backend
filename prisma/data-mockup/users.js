@@ -1,15 +1,16 @@
-const bcrypt = require("bcryptjs")
+const utils = require("../../src/utils")
 
 password = "123456"
 
-hashPassword = bcrypt.hashSync(password, 10)
-
+hashPassword = utils.bcrypt.hashedsync(password)
+const profileImage = "https://download-th.com/wp-content/uploads/2020/12/TAT.jpg"
 
 
 const ROLE = {
     USER: "USER",
     ADMIN: "ADMIN",
     ORGANIZER: "ORGANIZER",
+
 }
 
 const GENDER = {
@@ -25,6 +26,7 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage,
     },
     {
         userName: "pat", //2
@@ -32,6 +34,7 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage,
     },
     {
         userName: "japan", //3
@@ -39,6 +42,7 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage,
     },
     {
         userName: "guide", //4
@@ -46,6 +50,7 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage,
     },
     {
         userName: "bank", //5
@@ -53,6 +58,7 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage,
     },
     {
         userName: "pete", //6
@@ -60,5 +66,6 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage,
     },
 ]
