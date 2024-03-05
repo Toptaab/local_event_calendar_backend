@@ -43,8 +43,8 @@ module.exports.login = utils.catchError(async (req, res, nexr) => {
     // DELETE KEY of password from user data
     delete user.password
     // SIGN token from user data
-    const token = utils.jwt.sign(user)
-    res.status(200).json({ token })
+    const accessToken = utils.jwt.sign({id:user.id})
+    res.status(200).json({ accessToken })
 })
 
 module.exports.register = utils.catchError(async (req, res, next) => {
@@ -112,16 +112,14 @@ module.exports.register = utils.catchError(async (req, res, next) => {
     // DELETE KEY of password from user data
     delete user.password
     // SIGN token from user data
-    const token = utils.jwt.sign(user)
-    let organizerId
-    if (organizer) {
-        organizerId = organizer.id
-    }
+    const accessToken = utils.jwt.sign({id:user.id})
 
     // delete local image
     fs.unlink(profileImage[0].path, () => {})
     fs.unlink(identityCopyImage[0].path, () => {})
-    res.status(200).json({ token })
+
+
+    res.status(200).json({ accessToken })
 })
 
 
