@@ -17,7 +17,7 @@ module.exports.get = async (id) =>
     await prisma.event.findUnique({
         where: { id },
         include: {
-            category: true,
+            eventType: true,
             report: true,
             EventFeedback: true,
             EventImage: true,
@@ -40,8 +40,6 @@ module.exports.getAllInScope = async ({ minLat, maxLat, minLon, maxLon }) =>
             },
         },
         include: {
-            organizer: {
-                select: {},
-            },
+            EventAddress: true,
         },
     })
