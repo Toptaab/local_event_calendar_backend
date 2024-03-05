@@ -10,3 +10,4 @@ module.exports.delete = async ({ id }) => await prisma.user.delete({ where: { id
 // =========================================== CUSTOM REPOSITORY ===================================
 
 module.exports.createOrganizerInfomation = async (data) => await prisma.organizerInformation.create({data})
+module.exports.getOrganizer = async (where) => await prisma.user.findFirst({ where })

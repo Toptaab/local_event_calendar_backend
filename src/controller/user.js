@@ -21,6 +21,8 @@ module.exports.get = async (req, res, next) => {
         const { userId } = req.params
 
         const user = await repo.user.get({ id: +userId })
+
+        delete user.password
         res.status(200).json({ user })
     } catch (err) {
         next(err)
@@ -124,11 +126,24 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 
 
 
-module.exports.update = async (req, res, next) => {
+
+
+
+module.exports.update = utils.catchError(async (req,res,next) => {
+    const { profileImage, identityCopyImage } = req.files
+    const { userName, password, email, lineToken, gender } = req.body
+
+
+    const { userId } = req.params
+    const { firstName, lastName } = req.body
+    const user = await repo.user.update({ id }, { firstName, lastName })
+
+})
+
+
+async (req, res, next) => {
     try {
-        const { id } = req.params
-        const { firstName, lastName } = req.body
-        const user = await repo.user.update({ id }, { firstName, lastName })
+
 
         res.status(200).json({ user })
     } catch (err) {

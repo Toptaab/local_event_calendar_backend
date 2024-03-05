@@ -2,7 +2,7 @@ const seedData = {
     province: require("./province/provinces"),
     district: require("./province/districts"),
     subDistrict: require("./province/subdistricts"),
-    eventType: require('./eventType'),
+    category: require('./category'),
     user: require('./users'),
     organizerInformation: require('./organizerInformations'),
     event: require('./events'),

@@ -92,8 +92,8 @@ model Event {
   isPublish              Boolean              @default(false) @map("is_publish")
   themeId                Int?                 @map("theme_id")
   theme                  Theme?               @relation(fields: [themeId], references: [id])
-  eventTypeId            Int                  @map("event_type_id")
-  eventType              EventType            @relation(fields: [eventTypeId], references: [id])
+  categoryId             Int                  @map("category_id")
+  category               Category             @relation(fields: [categoryId], references: [id])
   isExpire               Boolean              @default(false) @map("is_expire")
   telNumber              String?              @map("tel_number")
   website                String?
@@ -137,12 +137,12 @@ model EventImage {
   @@map("event_images")
 }
 
-model EventType {
+model Category {
   id    Int     @id @default(autoincrement())
   name  String
   Event Event[]
 
-  @@map("event_types")
+  @@map("categies")
 }
 
 model Theme {

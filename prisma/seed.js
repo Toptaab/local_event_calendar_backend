@@ -7,7 +7,7 @@ async function seeding() {
     await prisma.province.createMany({ data: data.province })
     await prisma.district.createMany({ data: data.district })
     await prisma.subDistrict.createMany({ data: data.subDistrict })
-    await prisma.eventType.createMany({ data: data.eventType })
+    await prisma.category.createMany({ data: data.category })
     // ================================= Constants data ===============================//
 
     // ================================= mockupdata ===============================//
