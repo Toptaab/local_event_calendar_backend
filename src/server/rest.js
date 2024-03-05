@@ -14,6 +14,8 @@ const { errorMiddlewares } = require("../middlewares/error")
 const CustomError = require("../config/error")
 const userRoute = require("../router/user")
 const eventRoute = require("../router/event")
+const provinceRoute = require('../router/province')
+const categoryRoute = require("../router/category")
 
 
 
@@ -38,6 +40,8 @@ module.exports = function restApiServer(app) {
 
     app.use("/user", userRoute)
     app.use("/event", eventRoute)
+    app.use("/province", provinceRoute)
+    app.use("/category", categoryRoute)
 
 
 
