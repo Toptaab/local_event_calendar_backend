@@ -2,39 +2,26 @@ const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
+const { profilePath, IdentityPath} = require("../constant/cludinaryPath")
 const fs = require("fs")
 
-const localPath = "/local_event_path"
 
-module.exports.getAll = async (req, res, next) => {
-    try {
-        const users = await repo.user.getAll()
-        res.status(200).json({ users })
-    } catch (err) {
-        next(err)
-    }
-    return
-}
+
+module.exports.getAll = utils.catchError(async (req,res,next) => {
+    const users = await repo.user.getAll()
+    res.status(200).json({ users })
+})
 
 
 
+module.exports.getUser = utils.catchError(async(req,res,next) => {
+    const { userId } = req.params
 
-module.exports.getUser = 
+    const user = await repo.user.getUser({ id: +userId })
 
-
-async (req, res, next) => {
-    try {
-        const { userId } = req.params
-
-        const user = await repo.user.getUser({ id: +userId })
-
-        delete user.password
-        res.status(200).json({ user })
-    } catch (err) {
-        next(err)
-    }
-    return
-}
+    delete user.password
+    res.status(200).json({ user })
+})
 
 
 module.exports.authMe = utils.catchError(async (req,res,next) =>{
@@ -86,13 +73,12 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 
     //Role case
     let user
-    let organizer
     let profileResult
     let identityCopyImageResult
 
     // upload profile image
     if (profileImage) {
-        profileResult = await utils.uploadImage(profileImage[0].path, localPath + "/user-profile")
+        profileResult = await utils.uploadImage(profileImage[0].path, profilePath)
     }
 
     switch (role) {
@@ -106,9 +92,9 @@ module.exports.register = utils.catchError(async (req, res, next) => {
             user = await repo.user.create({ userName, password: hashed, email, role, gender, profileImage: profileResult.secure_url })
             const { officialName, corporation, companyNumber } = req.body
             if (identityCopyImage) {
-                identityCopyImageResult = await utils.uploadImage(identityCopyImage[0].path, localPath + "/company-identity")
+                identityCopyImageResult = await utils.uploadImage(identityCopyImage[0].path, IdentityPath)
             }
-            organizer = await repo.user.createOrganizerInfomation({
+            await repo.user.createOrganizerInfomation({
                 userId: +user.id,
                 officialName,
                 corporation,

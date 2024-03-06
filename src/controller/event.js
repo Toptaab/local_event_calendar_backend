@@ -2,6 +2,8 @@ const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
 const geolib = require("geolib")
+const { coverImagePath, eventImagePath } = require("../constant/cludinaryPath")
+const fs = require("fs")
 
 exports.getAll = utils.catchError(async (req, res, next) => {
     const allEvent = await repo.event.getAll()
@@ -9,14 +11,55 @@ exports.getAll = utils.catchError(async (req, res, next) => {
 })
 
 exports.getEvent = utils.catchError(async (req, res, next) => {
-    const event = await repo.event.get(+req.params.eventId)
+    const { eventId } = req.params
+
+    const event = await repo.event.get({ id: +eventId })
     res.status(200).json(event)
 })
 
 exports.createEvent = utils.catchError(async (req, res, next) => {
- const event = await repo.event.create()
+    const data = req.body
+    data.organizerInformationId = req.user.id
+    const { coverImage, image } = req.files
+
+    // Gurd boolean and string
+    if(data.isYearly === "true"){data.isYearly = true}
+    else{data.isYearly = false}
+    data.categoryId = +data.categoryId
+    data.provinceId = +data.provinceId
+    // data.districtId = +data.districtId
+    // data.subDistrictId = +data.subDistrictId
+    
+    
 
 
+    // UPLOAD coverImage to Cloudinary
+    const coverImageUrl = await utils.uploadImage(coverImage[0].path, coverImagePath)
+    data.coverImage = coverImageUrl.secure_url
+
+    // CREATE event
+    const event = await repo.event.createEvent( data )
+
+    // UPLOAD eventImage to Cloudinary
+    const eventData = []
+    for (file of image) {
+        const { path } = file
+        const eventImageUrl = await utils.uploadImage(path, eventImagePath)
+        eventData.push({ eventId: event.id, image: eventImageUrl.secure_url })
+    }
+
+    // CREATE eventImage
+    await repo.eventImage.createEventImages(eventData)
+
+
+    // Delete image in public folder
+    fs.unlink(coverImage[0].path, () => {})
+    for (file of image) {
+        const { path } = file
+        fs.unlink(path, () => {})
+    }
+
+    res.status(200).json(event.id)
 })
 
 module.exports.getAllWithinRadius = utils.catchError(async (req, res, next) => {

@@ -19,6 +19,6 @@ userRoute.post("/register",upload.fields([{name: 'profileImage',maxCount: 1},{na
 
 // =============================== ongoing =======================//
 userRoute.put("/:id",upload.fields([{name: 'profileImage',maxCount: 1},{name: 'identityCopyImage', maxCount: 1}]) , c.user.update)
-userRoute.delete("/:id", authenticate, c.user.delete)
+userRoute.delete("/:id", authentication, c.user.delete)
 
 module.exports = userRoute
