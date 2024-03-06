@@ -28,7 +28,7 @@ module.exports.get = async (id) =>
         },
     })
 
-module.exports.create = async (data) => await prisma.event.create({ data })
+module.exports.createEvent = async (data) => await prisma.event.create({ data })
 
 // =========================================== CUSTOM REPOSITORY ===================================
 

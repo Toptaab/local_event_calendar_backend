@@ -13,7 +13,11 @@ exports.getEvent = utils.catchError(async (req, res, next) => {
     res.status(200).json(event)
 })
 
-exports.createEvent = utils.catchError(async (req, res, next) => {})
+exports.createEvent = utils.catchError(async (req, res, next) => {
+ const event = await repo.event.create()
+
+
+})
 
 module.exports.getAllWithinRadius = utils.catchError(async (req, res, next) => {
     // const { distance, centralPoint } = req.body
