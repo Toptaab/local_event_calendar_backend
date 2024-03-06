@@ -16,11 +16,17 @@ module.exports.getAll = async (req, res, next) => {
     return
 }
 
-module.exports.get = async (req, res, next) => {
+
+
+
+module.exports.getUser = 
+
+
+async (req, res, next) => {
     try {
         const { userId } = req.params
 
-        const user = await repo.user.get({ id: +userId })
+        const user = await repo.user.getUser({ id: +userId })
 
         delete user.password
         res.status(200).json({ user })
@@ -30,10 +36,20 @@ module.exports.get = async (req, res, next) => {
     return
 }
 
+
+module.exports.authMe = utils.catchError(async (req,res,next) =>{
+    const { id } = req.user
+    
+    const user = await repo.user.getUser({id})
+
+    delete user.password
+    res.status(200).json(user)
+})
+
 module.exports.login = utils.catchError(async (req, res, nexr) => {
     const { email, password } = req.body
     // GET username from database
-    const user = await repo.user.get({ email })
+    const user = await repo.user.getUser({ email })
     if (!user) throw new CustomError("username or password is wrong", "WRONG_INPUT", 400)
 
     // COMPARE password with database
@@ -52,13 +68,13 @@ module.exports.register = utils.catchError(async (req, res, next) => {
     const { userName, password, email, lineToken, gender, role } = req.body
     //GUARD
     //VALIDATION CONFLICT email
-    const existEmail = await repo.user.get({ email })
+    const existEmail = await repo.user.getUser({ email })
     if (existEmail) {
         throw new CustomError("this email has aleady been used", "CONFLICT_USER", 400)
     }
     //VALIDATION CONFLICT line token
     if (lineToken) {
-        const existToken = await repo.user.get({ lineToken })
+        const existToken = await repo.user.getUser({ lineToken })
         if (existToken) {
             {
                 throw new CustomError("this line token has aleady been used", "CONFLICT_USER", 400)

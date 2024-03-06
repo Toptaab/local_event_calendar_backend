@@ -17,6 +17,7 @@ async function seeding() {
     await prisma.eventAddress.createMany({ data: data.eventAddress })
     await prisma.eventImage.createMany({ data: data.eventImage })
     await prisma.eventFacility.createMany({ data: data.eventFacility })
+    await prisma.highlightEvent.create({data: data.highlight})
     // ================================= mockupdata ===============================//
 }
 
