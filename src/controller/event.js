@@ -18,38 +18,45 @@ exports.getEvent = utils.catchError(async (req, res, next) => {
 })
 
 exports.createEvent = utils.catchError(async (req, res, next) => {
-    const data = req.body
-    data.organizerInformationId = req.user.id
+    const { provinceId, districtId, subDistrictId, address, lat, long, ...eventData } = req.body
     const { coverImage, image } = req.files
 
+    eventData.organizerInformationId = req.user.id
+    eventData.categoryId = +eventData.categoryId
+
     // Gurd boolean and string
-    if (data.isYearly === "true") {
-        data.isYearly = true
+    if (eventData.isYearly === "true") {
+        eventData.isYearly = true
     } else {
-        data.isYearly = false
+        eventData.isYearly = false
     }
-    data.categoryId = +data.categoryId
-    data.provinceId = +data.provinceId
-    // data.districtId = +data.districtId
-    // data.subDistrictId = +data.subDistrictId
 
     // UPLOAD coverImage to Cloudinary
     const coverImageUrl = await utils.uploadImage(coverImage[0].path, coverImagePath)
-    data.coverImage = coverImageUrl.secure_url
+    eventData.coverImage = coverImageUrl.secure_url
 
     // CREATE event
-    const event = await repo.event.createEvent(data)
+    const event = await repo.event.createEvent(eventData)
+
+    // CREATE event address
+    const eventAdressData = { provinceId, districtId, subDistrictId, address, lat, long,eventId: event.id }
+    for (const key in eventAdressData) {
+        if (key !== "address") {
+            eventAdressData[key] = +eventAdressData[key]
+        }
+    }
+    await repo.event.createEventAddess(eventAdressData)
 
     // UPLOAD eventImage to Cloudinary
-    const eventData = []
+    const eventImageData = []
     for (file of image) {
         const { path } = file
         const eventImageUrl = await utils.uploadImage(path, eventImagePath)
-        eventData.push({ eventId: event.id, image: eventImageUrl.secure_url })
+        eventImageData.push({ eventId: event.id, image: eventImageUrl.secure_url })
     }
 
     // CREATE eventImage
-    await repo.eventImage.createEventImages(eventData)
+    await repo.eventImage.createEventImages(eventImageData)
 
     // Delete image in public folder
     fs.unlink(coverImage[0].path, () => {})
@@ -57,7 +64,6 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
         const { path } = file
         fs.unlink(path, () => {})
     }
-
     res.status(200).json(event.id)
 })
 

@@ -39,7 +39,7 @@ model User {
   lineToken            String?               @map("line_token")
   password             String?               @db.VarChar(60)
   gender               Gender
-  profileImage         String?               @map("profile_image")
+  profileImage         String?               @map("profile_image") @db.Text
   createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamp(0)
   UserAddress          UserAddress?
@@ -86,7 +86,7 @@ model Event {
   id                     Int                  @id @default(autoincrement())
   organizerInformationId Int                  @map("organizerInformation_id")
   organizerInformation   OrganizerInformation @relation(fields: [organizerInformationId], references: [id])
-  coverImage             String               @map("cover_image")
+  coverImage             String               @map("cover_image") @db.Text
   title                  String
   description            String?              @db.Text
   startDate              DateTime             @map("start_date") @db.DateTime()
@@ -98,7 +98,7 @@ model Event {
   theme                  Theme?               @relation(fields: [themeId], references: [id])
   categoryId             Int                  @map("category_id")
   category               Category             @relation(fields: [categoryId], references: [id])
-  isExpire               Boolean              @default(false) @map("is_expire")
+  isExpired              Boolean              @default(false) @map("is_expired")
   telNumber              String?              @map("tel_number")
   website                String?
   email                  String?
@@ -140,7 +140,7 @@ model EventImage {
   id      Int    @id @default(autoincrement())
   eventId Int    @map("event_id")
   event   Event  @relation(fields: [eventId], references: [id])
-  image   String
+  image   String @db.Text
 
   @@map("event_images")
 }
