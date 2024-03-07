@@ -2,19 +2,15 @@ const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
-const { profilePath, IdentityPath} = require("../constant/cludinaryPath")
+const { profilePath, IdentityPath } = require("../constant/cludinaryPath")
 const fs = require("fs")
 
-
-
-module.exports.getAll = utils.catchError(async (req,res,next) => {
+module.exports.getAll = utils.catchError(async (req, res, next) => {
     const users = await repo.user.getAll()
     res.status(200).json({ users })
 })
 
-
-
-module.exports.getUser = utils.catchError(async(req,res,next) => {
+module.exports.getUser = utils.catchError(async (req, res, next) => {
     const { userId } = req.params
 
     const user = await repo.user.getUser({ id: +userId })
@@ -23,11 +19,10 @@ module.exports.getUser = utils.catchError(async(req,res,next) => {
     res.status(200).json({ user })
 })
 
-
-module.exports.authMe = utils.catchError(async (req,res,next) =>{
+module.exports.authMe = utils.catchError(async (req, res, next) => {
     const { id } = req.user
-    
-    const user = await repo.user.getUser({id})
+
+    const user = await repo.user.getUser({ id })
 
     delete user.password
     res.status(200).json(user)
@@ -46,7 +41,7 @@ module.exports.login = utils.catchError(async (req, res, nexr) => {
     // DELETE KEY of password from user data
     delete user.password
     // SIGN token from user data
-    const accessToken = utils.jwt.sign({id:user.id})
+    const accessToken = utils.jwt.sign({ id: user.id })
     res.status(200).json({ accessToken })
 })
 
@@ -85,6 +80,8 @@ module.exports.register = utils.catchError(async (req, res, next) => {
         // CREATE user to database
         case Role.USER:
             user = await repo.user.create({ userName, password: hashed, email, role, gender, profileImage: profileResult.secure_url })
+            // delete local image
+            fs.unlink(profileImage[0].path, () => {})
             break
 
         //  CREATE user to database for organizer role
@@ -101,6 +98,9 @@ module.exports.register = utils.catchError(async (req, res, next) => {
                 companyNumber: +companyNumber,
                 identityCopyImage: identityCopyImageResult.secure_url,
             })
+            // delete local image
+            fs.unlink(profileImage[0].path, () => {})
+            fs.unlink(identityCopyImage[0].path, () => {})
             break
 
         // CREATE admin to database
@@ -114,44 +114,27 @@ module.exports.register = utils.catchError(async (req, res, next) => {
     // DELETE KEY of password from user data
     delete user.password
     // SIGN token from user data
-    const accessToken = utils.jwt.sign({id:user.id})
-
-    // delete local image
-    fs.unlink(profileImage[0].path, () => {})
-    fs.unlink(identityCopyImage[0].path, () => {})
-
+    const accessToken = utils.jwt.sign({ id: user.id })
 
     res.status(200).json({ accessToken })
 })
 
-
-
-
-
-
-module.exports.update = utils.catchError(async (req,res,next) => {
+module.exports.update = utils.catchError(async (req, res, next) => {
     const { profileImage, identityCopyImage } = req.files
     const { userName, password, email, lineToken, gender } = req.body
-
 
     const { userId } = req.params
     const { firstName, lastName } = req.body
     const user = await repo.user.update({ id }, { firstName, lastName })
-
 })
-
-
-async (req, res, next) => {
+;async (req, res, next) => {
     try {
-
-
         res.status(200).json({ user })
     } catch (err) {
         next(err)
     }
     return
 }
-
 
 module.exports.delete = async (req, res, next) => {
     try {
