@@ -1,9 +1,9 @@
 const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
-const geolib = require("geolib")
 const { coverImagePath, eventImagePath } = require("../constant/cludinaryPath")
 const fs = require("fs")
+const { FACILITY_LIST } = require("../constant")
 
 exports.getAll = utils.catchError(async (req, res, next) => {
     const allEvent = await repo.event.getAll()
@@ -67,27 +67,6 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     res.status(200).json(event.id)
 })
 
-module.exports.getAllWithinRadius = utils.catchError(async (req, res, next) => {
-    // const { distance, centralPoint } = req.body
-
-    // Central point coordinates \
-    const centralPoint = { latitude: 13.6529, longitude: 100.4887 }
-
-    // Distance in meters
-    const distance = 5000 // 5 kilometers
-
-    //find scope
-    const bounds = geolib.getBoundsOfDistance(centralPoint, distance)
-    console.log(bounds)
-    const { latitude: minLat, longitude: minLon } = bounds[0]
-    const { latitude: maxLat, longitude: maxLon } = bounds[1]
-
-    // console.log(minLat,minLon,maxLat,maxLon);
-    const allEvent = await repo.event.getAllInScope({ minLat, minLon, maxLat, maxLon })
-
-    res.status(200).json(allEvent)
-})
-
 module.exports.getAllInScope = utils.catchError(async (req, res, next) => {
     const { _southWest, _northEast } = req.body
     const { lat: minLat, lng: minLon } = _southWest
@@ -97,4 +76,42 @@ module.exports.getAllInScope = utils.catchError(async (req, res, next) => {
     console.log(allEvent)
 
     res.status(200).json(allEvent)
+})
+
+module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
+    // console.log(req.body);
+    const data = req.body
+
+    const where = {}
+
+    // check where condition
+    if(data?.title) {
+        where.title = {}
+        where.title.contains = data.title
+    }
+    if (data?.categoryId) {
+        where.categoryId = data.categoryId
+    }
+    if (data?.provinceId) {
+        where.EventAddress = {}
+        where.EventAddress.provinceId = data.provinceId
+    }
+
+    //check event facility
+    const facilityArray = Object.keys(FACILITY_LIST)
+    for (value of facilityArray) {
+        if (data[value]) {
+            if (!where?.EventFacility) {
+                where.EventFacility = {}
+            }
+            where.EventFacility[value] = true
+        }
+    }
+
+    // console.log(where);
+
+    const events = await repo.event.getFilteredEvent(where)
+    // console.log(events);
+
+    res.status(200).json(events)
 })

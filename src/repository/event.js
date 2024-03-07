@@ -44,6 +44,20 @@ module.exports.getAllInScope = async ({ minLat, maxLat, minLon, maxLon }) =>
         },
     })
 
+// ============================================ filter event ======================================
+
+module.exports.getFilteredEvent = async (where) =>
+    await prisma.event.findMany({
+        where,
+        orderBy: { startDate: "asc" },
+        include: {
+            category: true,
+            EventFacility: true,
+            HighlightEvent: true,
+            EventAddress: true,
+            organizerInformation: { select: { officialName: true } },
+        },
+    })
 
 // ============================================ event address ======================================
 
