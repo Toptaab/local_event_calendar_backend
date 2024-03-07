@@ -10,8 +10,8 @@ const eventRoute = express.Router()
 eventRoute.get('/',c.event.getAll)
 eventRoute.get('/:eventId',c.event.getEvent)
 eventRoute.post('/',upload.fields([{name: 'coverImage',maxCount: 1},{name: 'image'}]),authentication, c.event.createEvent)
-eventRoute.post('/radius',c.event.getAllWithinRadius)
 eventRoute.post('/scope',c.event.getAllInScope)
+eventRoute.post('/filter',c.event.getFilteredEvent)
 
 
 
