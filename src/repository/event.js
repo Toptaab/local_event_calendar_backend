@@ -30,7 +30,7 @@ module.exports.get = async (where) =>
 
 module.exports.createEvent = async (data) => await prisma.event.create({ data })
 
-// =========================================== CUSTOM REPOSITORY ===================================
+// =========================================== event map =========================================
 
 module.exports.getAllInScope = async ({ minLat, maxLat, minLon, maxLon }) =>
     await prisma.event.findMany({
@@ -43,5 +43,10 @@ module.exports.getAllInScope = async ({ minLat, maxLat, minLon, maxLon }) =>
             EventAddress: true,
         },
     })
+
+
+// ============================================ event address ======================================
+
+module.exports.createEventAddess = async (data) => await prisma.eventAddress.create({data})
 
 
