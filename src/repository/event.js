@@ -24,7 +24,7 @@ module.exports.get = async (where) =>
             EventFacility: true,
             HighlightEvent: true,
             EventAddress: true,
-            organizerInformation: { select: { officialName: true } },
+            organizerInformation: { select: { officialName: true, user: { select: { profileImage: true } } } },
         },
     })
 
@@ -61,6 +61,4 @@ module.exports.getFilteredEvent = async (where) =>
 
 // ============================================ event address ======================================
 
-module.exports.createEventAddess = async (data) => await prisma.eventAddress.create({data})
-
-
+module.exports.createEventAddess = async (data) => await prisma.eventAddress.create({ data })

@@ -15,10 +15,11 @@ userRoute.get("/", c.user.getAll)
 userRoute.get("/auth",authentication ,c.user.authMe)
 userRoute.get("/:userId", c.user.getUser)
 userRoute.post("/login", c.user.login)
+userRoute.post("/remider/:eventId", authenticate , c.user.createRemider)
 userRoute.post("/register",upload.fields([{name: 'profileImage',maxCount: 1},{name: 'identityCopyImage', maxCount: 1}]) ,c.user.register)
 
 // =============================== ongoing =======================//
-userRoute.put("/:id",upload.fields([{name: 'profileImage',maxCount: 1},{name: 'identityCopyImage', maxCount: 1}]) , c.user.update)
-userRoute.delete("/:id", authentication, c.user.delete)
+userRoute.put("/:userId",authentication,upload.fields([{name: 'profileImage',maxCount: 1},{name: 'identityCopyImage', maxCount: 1}]) , c.user.update)
+userRoute.delete("/:userId", authentication, c.user.delete)
 
 module.exports = userRoute
