@@ -119,13 +119,27 @@ module.exports.register = utils.catchError(async (req, res, next) => {
     res.status(200).json({ accessToken })
 })
 
+
+
+// =========================================== on going ====================================== //
+
+module.exports.createRemider = utils.catchError(async(req,res,next) => {
+    const { id } = req.user
+    const { eventId } = req.params
+
+    await repo.remider.createRemider({userId: +id, eventId: +eventId})
+
+    res.status(200).json({message: "set remider success"})
+})
+
+
 module.exports.update = utils.catchError(async (req, res, next) => {
+    const { userId } = req.params
     const { profileImage, identityCopyImage } = req.files
     const { userName, password, email, lineToken, gender } = req.body
 
-    const { userId } = req.params
     const { firstName, lastName } = req.body
-    const user = await repo.user.update({ id }, { firstName, lastName })
+    // const user = await repo.user.update({ id }, { firstName, lastName })
 })
 ;async (req, res, next) => {
     try {

@@ -8,6 +8,7 @@ const uploadImage = async (imagePath, path) => {
         // Upload the image
         const result = await cloudinary.uploader.upload(imagePath, {
             folder: path,
+            use_filename: true
         })
         console.log(result)
         return result

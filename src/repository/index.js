@@ -3,7 +3,8 @@ const repo = {
     event: require("./event"),
     province: require('./province'),
     category: require('./category'),
-    eventImage: require('./eventImage')
+    eventImage: require('./eventImage'),
+    remider: require('./reminder')
     
 }
 module.exports = repo
