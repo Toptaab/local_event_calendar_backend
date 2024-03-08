@@ -18,9 +18,9 @@ exports.getEvent = utils.catchError(async (req, res, next) => {
 })
 
 exports.createEvent = utils.catchError(async (req, res, next) => {
-    const { provinceId, districtId, subDistrictId, address, lat, long, ...eventData } = req.body
+    const {food, medicalService, petFriendly, wifi, entranceFee, prayerIoom, toilet, parking, provinceId, districtId, subDistrictId, address, lat, long, ...eventData } =
+        req.body
     const { coverImage, image } = req.files
-
     eventData.organizerInformationId = req.user.id
     eventData.categoryId = +eventData.categoryId
 
@@ -32,14 +32,23 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     }
 
     // UPLOAD coverImage to Cloudinary
-    const coverImageUrl = await utils.uploadImage(coverImage[0].path, coverImagePath)
+    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage[0].path, coverImagePath)
     eventData.coverImage = coverImageUrl.secure_url
 
     // CREATE event
     const event = await repo.event.createEvent(eventData)
 
+    // CREATE Facility
+    const facilityData = { petFriendly, wifi, entranceFee, prayerIoom, toilet, parking,medicalService ,food}
+    for(key in facilityData){
+        if(facilityData[key] === "true"){facilityData[key] = true }
+        else{facilityData[key] = false}
+    }
+    facilityData.eventId = event.id
+    await repo.event.createFacility(facilityData)
+
     // CREATE event address
-    const eventAdressData = { provinceId, districtId, subDistrictId, address, lat, long,eventId: event.id }
+    const eventAdressData = { provinceId, districtId, subDistrictId, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
         if (key !== "address") {
             eventAdressData[key] = +eventAdressData[key]
@@ -51,7 +60,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     const eventImageData = []
     for (file of image) {
         const { path } = file
-        const eventImageUrl = await utils.uploadImage(path, eventImagePath)
+        const eventImageUrl = await utils.cloudinary.uploadImage(path, eventImagePath)
         eventImageData.push({ eventId: event.id, image: eventImageUrl.secure_url })
     }
 
@@ -85,7 +94,7 @@ module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
     const where = {}
 
     // check where condition
-    if(data?.title) {
+    if (data?.title) {
         where.title = {}
         where.title.contains = data.title
     }
@@ -115,3 +124,11 @@ module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
 
     res.status(200).json(events)
 })
+
+module.exports.updateEvent = utils.catchError(async (req, res, next) => {
+    const {} = req.body
+})
+
+// const publicId = utils.getPubblicId(eventData.coverImage)
+
+// const remove = await utils.cloudinary.deleteImage(publicId)

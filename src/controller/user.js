@@ -73,7 +73,7 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 
     // upload profile image
     if (profileImage) {
-        profileResult = await utils.uploadImage(profileImage[0].path, profilePath)
+        profileResult = await utils.cloudinary.uploadImage(profileImage[0].path, profilePath)
     }
 
     switch (role) {
@@ -89,7 +89,7 @@ module.exports.register = utils.catchError(async (req, res, next) => {
             user = await repo.user.create({ userName, password: hashed, email, role, gender, profileImage: profileResult.secure_url })
             const { officialName, corporation, companyNumber } = req.body
             if (identityCopyImage) {
-                identityCopyImageResult = await utils.uploadImage(identityCopyImage[0].path, IdentityPath)
+                identityCopyImageResult = await utils.cloudinary.uploadImage(identityCopyImage[0].path, IdentityPath)
             }
             await repo.user.createOrganizerInfomation({
                 userId: +user.id,
@@ -120,17 +120,18 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 })
 
 
-
-// =========================================== on going ====================================== //
-
 module.exports.createRemider = utils.catchError(async(req,res,next) => {
     const { id } = req.user
     const { eventId } = req.params
-
     await repo.remider.createRemider({userId: +id, eventId: +eventId})
-
     res.status(200).json({message: "set remider success"})
 })
+
+
+
+
+// =========================================== on going ====================================== //
+
 
 
 module.exports.update = utils.catchError(async (req, res, next) => {

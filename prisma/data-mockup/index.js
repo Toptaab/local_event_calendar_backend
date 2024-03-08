@@ -9,7 +9,8 @@ const seedData = {
     eventAddress: require('./eventAddress'),
     eventImage: require('./eventImage'),
     eventFacility: require('./eventFacility'),
-    highlight: require('./highlight')
+    highlight: require('./highlight'),
+    userAddress: require('./userAddress')
 }
 
 module.exports = seedData

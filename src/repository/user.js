@@ -1,7 +1,7 @@
 const prisma = require("../config/prisma")
 
 // =========================================== BASIC CRUD ===================================
-module.exports.getUser = async (where) => await prisma.user.findFirst({ where,include:{Reminder:{include:{event:true}},OrganizerInformation:{include:{Event:true}}} })
+module.exports.getUser = async (where) => await prisma.user.findFirst({ where,include:{UserAddress:true,Reminder:{include:{event:true}},OrganizerInformation:{include:{Event:true}}} })
 module.exports.getAll = async () => await prisma.user.findMany()
 module.exports.create = async (data) => await prisma.user.create({ data })
 module.exports.update = async ({ id }, data) => await prisma.user.update({ where: { id }, data })

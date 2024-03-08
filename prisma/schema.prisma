@@ -167,7 +167,7 @@ model EventFacility {
   event          Event   @relation(fields: [eventId], references: [id])
   parking        Boolean @default(false)
   toilet         Boolean @default(false)
-  prayerRoom     Boolean @default(false) @map("meditation_room")
+  prayerRoom     Boolean @default(false) @map("prayer_room")
   food           Boolean @default(false)
   entranceFee    Boolean @default(false) @map("entrance_fee")
   wifi           Boolean @default(false)
