@@ -1,6 +1,6 @@
 const cloudinary = require("../config/cloudinary")
 
-const uploadImage = async (imagePath, path) => {
+module.exports.uploadImage = async (imagePath, path) => {
     const options = {
         use_filename: true,
     }
@@ -17,4 +17,16 @@ const uploadImage = async (imagePath, path) => {
     }
 }
 
-module.exports = uploadImage
+module.exports.deleteImage = async (publicId) => {
+    try {
+        const temp = publicId
+        const result = await cloudinary.uploader.destroy(publicId)
+
+        console.log(result)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+

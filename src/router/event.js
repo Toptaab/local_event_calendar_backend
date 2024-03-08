@@ -17,7 +17,7 @@ eventRoute.post('/filter',c.event.getFilteredEvent)
 
 // =============================== ongoing =======================//
 
-eventRoute.put('/',authentication,upload.fields([{name: 'coverImage',maxCount: 1},{name: 'image'}]), c.event.createEvent)
+eventRoute.put('/',authentication,upload.single('coverImage'), c.event.updateEvent)
 
 
 

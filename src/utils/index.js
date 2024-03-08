@@ -2,6 +2,7 @@ const utils = {
     jwt: require("./jwt"),
     bcrypt: require("./bcrypt"),
     catchError: require('./catchError'),
-    uploadImage: require('./cloudinary')
+    cloudinary: require('./cloudinary'),
+    getPubblicId: require('./getCloudinaryPublicId')
 }
 module.exports = utils

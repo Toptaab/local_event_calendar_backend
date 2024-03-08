@@ -62,3 +62,8 @@ module.exports.getFilteredEvent = async (where) =>
 // ============================================ event address ======================================
 
 module.exports.createEventAddess = async (data) => await prisma.eventAddress.create({ data })
+
+
+// ============================================ event facility ======================================
+
+module.exports.createFacility =async (data) => await prisma.eventFacility.create({data})

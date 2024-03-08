@@ -12,6 +12,7 @@ async function seeding() {
 
     // ================================= mockupdata ===============================//
     await prisma.user.createMany({ data: data.user })
+    await prisma.userAddress.createMany({data: data.userAddress})
     await prisma.organizerInformation.createMany({ data: data.organizerInformation })
     await prisma.event.createMany({ data: data.event })
     await prisma.eventAddress.createMany({ data: data.eventAddress })
