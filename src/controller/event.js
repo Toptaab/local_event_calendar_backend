@@ -164,6 +164,14 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     const { eventId } = req.params
     const coverImage = req.file
 
+    //Authorization Guard
+    const userId = req.user.id
+    const { OrganizerInformation } = await repo.user.getUser({ id: +userId })
+    const eventOwner = await repo.event.get({ id: +eventId })
+    if (eventOwner.organizerInformationId !== OrganizerInformation.id) {
+        throw new CustomError("this is not your event", "Athorization", 400)
+    }
+
     // Guard boolean and string
     if (eventData.isYearly === "true") {
         eventData.isYearly = true
@@ -174,14 +182,14 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     // Delete oldimage
     const oldEvent = await repo.event.get({ id: +eventId })
     const publicId = utils.getPubblicId(oldEvent.coverImage)
-    const remove = await utils.cloudinary.deleteImage(publicId)
+    await utils.cloudinary.deleteImage(publicId)
 
     // UPLOAD coverImage to Cloudinary
-    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage[0].path, coverImagePath)
+    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path, coverImagePath)
     eventData.coverImage = coverImageUrl.secure_url
 
     // UPDATE event
-    const event = await repo.event.updateEvent({ id: +eventData }, eventData)
+    const event = await repo.event.updateEvent({ id: +eventId }, eventData)
 
     // UPDATE facility
     const facilityData = { parking, toilet, prayerRoom, food, entranceFee, wifi, medicalService, petFriendly }
@@ -192,7 +200,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
             facilityData[key] = false
         }
     }
-    const facility = await repo.event.updateFacility({ eventId: +eventId }, facilityData)
+    await repo.event.updateFacility({ eventId: +eventId }, facilityData)
     fs.unlink(coverImage.path, () => {})
 
     // UPDATE Event address
@@ -205,4 +213,32 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     await repo.event.updateEventAddess({ eventId: +eventId }, eventAdressData)
 
     res.status(200).json({ message: "Update success" })
+})
+
+module.exports.deleteEvent = utils.catchError(async (req, res, next) => {
+    const { eventId } = req.params
+
+    //Authorization Guard
+    const userId = req.user.id
+    const { OrganizerInformation } = await repo.user.getUser({ id: +userId })
+    const eventOwner = await repo.event.get({ id: +eventId })
+    if (eventOwner.organizerInformationId !== OrganizerInformation.id) {
+        throw new CustomError("this is not your event", "Athorization", 400)
+    }
+
+    // Delete oldimage
+    const oldEvent = await repo.event.get({ id: +eventId })
+    const publicId = utils.getPubblicId(oldEvent.coverImage)
+    await utils.cloudinary.deleteImage(publicId)
+
+    await repo.eventImage.deleteEventImages({ eventId: +eventId })
+    await repo.event.deleteEventAddess({ eventId: +eventId })
+    await repo.event.deleteHighlightEvent({ eventId: +eventId })
+    await repo.event.deleteReport({ eventId: +eventId })
+    await repo.reminder.deleteReminderByEventId({ eventId: +eventId })
+    await repo.event.deleteEventFeedback({ eventId: +eventId })
+    await repo.event.deleteFacility({ eventId: +eventId })
+    await repo.event.deleteEvent({ id: +eventId })
+
+    res.status(200).json({ message: "Delete success" })
 })

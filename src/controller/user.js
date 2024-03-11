@@ -120,10 +120,17 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 })
 
 
-module.exports.createRemider = utils.catchError(async(req,res,next) => {
+module.exports.createReminder = utils.catchError(async(req,res,next) => {
     const { id } = req.user
     const { eventId } = req.params
-    await repo.remider.createRemider({userId: +id, eventId: +eventId})
+    await repo.reminder.createReminder({userId: +id, eventId: +eventId})
+    res.status(200).json({message: "set remider success"})
+})
+
+module.exports.deleteReminder = utils.catchError(async(req,res,next) => {
+    const { id } = req.user
+    const { eventId } = req.params
+    await repo.reminder.deleteReminder({userId:+id ,eventId: +eventId})
     res.status(200).json({message: "set remider success"})
 })
 

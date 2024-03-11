@@ -4,7 +4,7 @@ const repo = {
     province: require('./province'),
     category: require('./category'),
     eventImage: require('./eventImage'),
-    remider: require('./reminder')
+    reminder: require('./reminder')
     
 }
 module.exports = repo
