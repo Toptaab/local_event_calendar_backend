@@ -18,13 +18,28 @@ exports.getEvent = utils.catchError(async (req, res, next) => {
 })
 
 exports.createEvent = utils.catchError(async (req, res, next) => {
-    const {food, medicalService, petFriendly, wifi, entranceFee, prayerIoom, toilet, parking, provinceId, districtId, subDistrictId, address, lat, long, ...eventData } =
-        req.body
+    const {
+        food,
+        medicalService,
+        petFriendly,
+        wifi,
+        entranceFee,
+        prayerRoom,
+        toilet,
+        parking,
+        provinceId,
+        districtId,
+        subDistrictId,
+        address,
+        lat,
+        long,
+        ...eventData
+    } = req.body
     const { coverImage, image } = req.files
     eventData.organizerInformationId = req.user.id
     eventData.categoryId = +eventData.categoryId
 
-    // Gurd boolean and string
+    // Guard boolean and string
     if (eventData.isYearly === "true") {
         eventData.isYearly = true
     } else {
@@ -39,10 +54,13 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     const event = await repo.event.createEvent(eventData)
 
     // CREATE Facility
-    const facilityData = { petFriendly, wifi, entranceFee, prayerIoom, toilet, parking,medicalService ,food}
-    for(key in facilityData){
-        if(facilityData[key] === "true"){facilityData[key] = true }
-        else{facilityData[key] = false}
+    const facilityData = { petFriendly, wifi, entranceFee, prayerRoom, toilet, parking, medicalService, food }
+    for (key in facilityData) {
+        if (facilityData[key] === "true") {
+            facilityData[key] = true
+        } else {
+            facilityData[key] = false
+        }
     }
     facilityData.eventId = event.id
     await repo.event.createFacility(facilityData)
@@ -126,9 +144,65 @@ module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
 })
 
 module.exports.updateEvent = utils.catchError(async (req, res, next) => {
-    const {} = req.body
+    const {
+        food,
+        medicalService,
+        petFriendly,
+        wifi,
+        entranceFee,
+        prayerRoom,
+        toilet,
+        parking,
+        provinceId,
+        districtId,
+        subDistrictId,
+        address,
+        lat,
+        long,
+        ...eventData
+    } = req.body
+    const { eventId } = req.params
+    const coverImage = req.file
+
+    // Guard boolean and string
+    if (eventData.isYearly === "true") {
+        eventData.isYearly = true
+    } else {
+        eventData.isYearly = false
+    }
+
+    // Delete oldimage
+    const oldEvent = await repo.event.get({ id: +eventId })
+    const publicId = utils.getPubblicId(oldEvent.coverImage)
+    const remove = await utils.cloudinary.deleteImage(publicId)
+
+    // UPLOAD coverImage to Cloudinary
+    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage[0].path, coverImagePath)
+    eventData.coverImage = coverImageUrl.secure_url
+
+    // UPDATE event
+    const event = await repo.event.updateEvent({ id: +eventData }, eventData)
+
+    // UPDATE facility
+    const facilityData = { parking, toilet, prayerRoom, food, entranceFee, wifi, medicalService, petFriendly }
+    for (key in facilityData) {
+        if (facilityData[key] === "true") {
+            facilityData[key] = true
+        } else {
+            facilityData[key] = false
+        }
+    }
+    const facility = await repo.event.updateFacility({ eventId: +eventId }, facilityData)
+    fs.unlink(coverImage.path, () => {})
+
+    // UPDATE Event address
+    const eventAdressData = { provinceId, districtId, subDistrictId, address, lat, long, eventId: event.id }
+    for (const key in eventAdressData) {
+        if (key !== "address") {
+            eventAdressData[key] = +eventAdressData[key]
+        }
+    }
+    await repo.event.updateEventAddess({ eventId: +eventId }, eventAdressData)
+
+    res.status(200).json({ message: "Update success" })
 })
-
-// const publicId = utils.getPubblicId(eventData.coverImage)
-
-// const remove = await utils.cloudinary.deleteImage(publicId)
