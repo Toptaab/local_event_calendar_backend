@@ -130,7 +130,7 @@ module.exports.createReminder = utils.catchError(async(req,res,next) => {
 module.exports.deleteReminder = utils.catchError(async(req,res,next) => {
     const { id } = req.user
     const { eventId } = req.params
-    await repo.reminder.deleteReminder({userId:+id ,eventId: +eventId})
+    await repo.reminder.deleteReminder({userId:+id},{eventId: +eventId})
     res.status(200).json({message: "set remider success"})
 })
 
