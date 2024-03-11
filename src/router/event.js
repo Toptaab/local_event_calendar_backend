@@ -17,7 +17,7 @@ eventRoute.post('/filter',c.event.getFilteredEvent)
 
 // =============================== ongoing =======================//
 
-eventRoute.put('/',authentication,upload.single('coverImage'), c.event.updateEvent)
+eventRoute.put('/:eventId',authentication,upload.single('coverImage'), c.event.updateEvent) // update onlt information and coverImage
 
 
 

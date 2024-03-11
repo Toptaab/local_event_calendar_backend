@@ -172,7 +172,7 @@ model EventFacility {
   entranceFee    Boolean @default(false) @map("entrance_fee")
   wifi           Boolean @default(false)
   medicalService Boolean @default(false) @map("medical_service")
-  petFriend      Boolean @default(false) @map("pet_friendly")
+  petFriendly      Boolean @default(false) @map("pet_friendly")
 
   @@map("event_facility")
 }

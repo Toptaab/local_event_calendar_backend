@@ -30,6 +30,8 @@ module.exports.get = async (where) =>
 
 module.exports.createEvent = async (data) => await prisma.event.create({ data })
 
+module.exports.updateEvent = async (where,data) => prisma.event.update({where,data})
+
 // =========================================== event map =========================================
 
 module.exports.getAllInScope = async ({ minLat, maxLat, minLon, maxLon }) =>
@@ -62,8 +64,10 @@ module.exports.getFilteredEvent = async (where) =>
 // ============================================ event address ======================================
 
 module.exports.createEventAddess = async (data) => await prisma.eventAddress.create({ data })
+module.exports.updateEventAddess = async (where,data) => await prisma.eventAddress.update({where, data })
 
 
 // ============================================ event facility ======================================
 
 module.exports.createFacility =async (data) => await prisma.eventFacility.create({data})
+module.exports.updateFacility = async (where,data) => await prisma.eventFacility.update({where,data})
