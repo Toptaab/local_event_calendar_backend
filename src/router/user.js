@@ -15,7 +15,8 @@ userRoute.get("/", c.user.getAll)
 userRoute.get("/auth",authentication ,c.user.authMe)
 userRoute.get("/:userId", c.user.getUser)
 userRoute.post("/login", c.user.login)
-userRoute.post("/remider/:eventId", authenticate , c.user.createRemider)
+userRoute.post("/reminder/:eventId", authenticate , c.user.createReminder)
+userRoute.delete("/reminder/:eventId", authenticate , c.user.deleteReminder)
 userRoute.post("/register",upload.fields([{name: 'profileImage',maxCount: 1},{name: 'identityCopyImage', maxCount: 1}]) ,c.user.register)
 
 // =============================== ongoing =======================//

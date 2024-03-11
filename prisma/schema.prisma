@@ -108,8 +108,8 @@ model Event {
   EventImage             EventImage[]
   EventAddress           EventAddress?
   HighlightEvent         HighlightEvent?
-  report                 Report[]
-  Reminder               Reminder[]
+  Report                 Report[]
+  Reminder               Reminder?
   EventFeedback          EventFeedback[]
   EventFacility          EventFacility?
 
@@ -219,7 +219,7 @@ model Reminder {
   id      Int   @id @default(autoincrement())
   userId  Int   @map("user_id")
   user    User  @relation(fields: [userId], references: [id])
-  eventId Int   @map("event_id")
+  eventId Int   @map("event_id") @unique
   event   Event @relation(fields: [eventId], references: [id])
 
   @@map("reminders")
