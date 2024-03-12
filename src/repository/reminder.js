@@ -2,7 +2,7 @@ const prisma = require("../config/prisma");
 
 
 
-module.exports.getAll = async()=> await prisma.reminder.findMany({})
+module.exports.getAll = async()=> await prisma.reminder.findMany({include:{event:{include:{EventImage:true}}}})
 module.exports.createReminder = async (data) => await prisma.reminder.create({data})
 module.exports.deleteReminder = async (userId,eventId) => await prisma.reminder.deleteMany({where:{AND:[userId,eventId]}})
 
