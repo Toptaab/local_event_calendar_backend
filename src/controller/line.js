@@ -1,6 +1,7 @@
 const repo = require("../repository")
 const utils = require("../utils")
 const axios = require("axios")
+require('dotenv').config()
 
 module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
     console.log(req.body)
@@ -22,40 +23,54 @@ module.exports.login = utils.catchError(async (req, res, next) => {
 })
 
 module.exports.pushContent = utils.catchError(async (req, res, next) => {
-    const channelAccessToken =
-        "sSlNPbokPnM2SywPy5TQ6zuqUXgKIchpatQWnNBvD0VdFeqI3T0K6mxapEP4Ul4oJ9WyQA4FB0qKPJnL3Sq1vR4Adpd4xnzPMvYuJfQZ1CKEssid4I90Hsku51sJKfeY/40JQgvjGlQ4fE4+av0lbwdB04t89/1O/w1cDnyilFU="
+
+ const Reminder = await repo.reminder.getAll()
 
     const flexMessage = {
-        to: "U4d8e3980a1b5d60bdaec6acefb49249d",
+        to: "U2293b8a9d37350fa9e6690f592b7c8a5",
         messages: [
             {
-                type: "flex",
-                altText: "This is a Flex Message",
-                contents: {
-                    type: "bubble",
-                    body: {
-                        type: "box",
-                        layout: "horizontal",
-                        contents: [
-                            {
-                                type: "text",
-                                text: "Hello,",
-                            },
-                            {
-                                type: "text",
-                                text: "World!",
-                            },
-                        ],
+                "type": "template",
+                "altText": "This is a buttons template",
+                "template": {
+                  "type": "buttons",
+                  "thumbnailImageUrl": "https://res.cloudinary.com/dxhpdgd6k/image/upload/v1710256886/local_event_path/cover-image/1710256882363221991454_tg5tid.png",
+                  "imageAspectRatio": "rectangle",
+                  "imageSize": "cover",
+                  "imageBackgroundColor": "#FFFFFF",
+                  "title": "Menu",
+                  "text": "Please select",
+                  "defaultAction": {
+                    "type": "uri",
+                    "label": "View detail",
+                    "uri": "http://example.com/page/123"
+                  },
+                  "actions": [
+                    {
+                      "type": "postback",
+                      "label": "Buy",
+                      "data": "action=buy&itemid=123"
                     },
-                }, 
-            },
+                    {
+                      "type": "postback",
+                      "label": "Add to cart",
+                      "data": "action=add&itemid=123"
+                    },
+                    {
+                      "type": "uri",
+                      "label": "View detail",
+                      "uri": "http://example.com/page/123"
+                    }
+                  ]
+                }
+              }
         ],
     }
 
     const result = await axios.post("https://api.line.me/v2/bot/message/push", flexMessage, {
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${channelAccessToken}`,
+            Authorization: `Bearer ${process.env.LINE_ACCESS_TOKEN}`,
         },
     })
 
