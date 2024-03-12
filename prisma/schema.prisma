@@ -36,7 +36,7 @@ model User {
   email                String
   isVerify             Boolean               @default(false) @map("is_verify")
   role                 Role                  @default(USER)
-  lineToken            String?               @map("line_token")
+  lineToken            String?               @db.Text @map("line_token")
   password             String?               @db.VarChar(60)
   gender               Gender
   profileImage         String?               @map("profile_image") @db.Text
