@@ -16,6 +16,7 @@ const userRoute = require("../router/user")
 const eventRoute = require("../router/event")
 const provinceRoute = require('../router/province')
 const categoryRoute = require("../router/category")
+const lineRoute = require("../router/line-api")
 
 
 
@@ -42,6 +43,7 @@ module.exports = function restApiServer(app) {
     app.use("/event", eventRoute)
     app.use("/province", provinceRoute)
     app.use("/category", categoryRoute)
+    app.use("/line", lineRoute)
 
 
 
