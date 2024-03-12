@@ -17,6 +17,7 @@ const eventRoute = require("../router/event")
 const provinceRoute = require('../router/province')
 const categoryRoute = require("../router/category")
 const lineRoute = require("../router/line-api")
+const path = require("path")
 
 const staticPath = path.join(__dirname,"../../public")
 
