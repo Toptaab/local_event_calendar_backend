@@ -4,8 +4,8 @@ const prisma = require("../config/prisma")
 module.exports.getUser = async (where) => await prisma.user.findFirst({ where,include:{UserAddress:true,Reminder:{include:{event:true}},OrganizerInformation:{include:{Event:true}}} })
 module.exports.getAll = async () => await prisma.user.findMany()
 module.exports.create = async (data) => await prisma.user.create({ data })
-module.exports.update = async ({ id }, data) => await prisma.user.update({ where: { id }, data })
-module.exports.delete = async ({ id }) => await prisma.user.delete({ where: { id } })
+module.exports.update = async ( where , data) => await prisma.user.update({ where, data })
+module.exports.delete = async ( where ) => await prisma.user.delete({ where })
 
 // =========================================== CUSTOM REPOSITORY ===================================
 

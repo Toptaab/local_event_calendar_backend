@@ -18,7 +18,7 @@ const provinceRoute = require('../router/province')
 const categoryRoute = require("../router/category")
 const lineRoute = require("../router/line-api")
 
-
+const staticPath = path.join(__dirname,"../../public")
 
 //=====================================================Server Zone
 module.exports = function restApiServer(app) {
@@ -27,7 +27,7 @@ module.exports = function restApiServer(app) {
     app.use(cors())
     app.use(json())
     app.use(urlencoded({ extended: false }))
-    app.use(express.static("public"))
+    app.use(express.static(staticPath))
 
     //=====================================================Routing Zone
     app.use("/ping", (req, res, next) => {
@@ -38,7 +38,7 @@ module.exports = function restApiServer(app) {
             next(new CustomError("Ping Error", "NotFoundData", 500))
         }
     })
-
+    app.use("/public", express.static(staticPath))
     app.use("/user", userRoute)
     app.use("/event", eventRoute)
     app.use("/province", provinceRoute)
