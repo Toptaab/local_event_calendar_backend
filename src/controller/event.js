@@ -201,7 +201,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     eventData.coverImage = coverImageUrl.secure_url
 
     // UPDATE event
-    eventData.categoryId = +eventData.categoryId
+    if(eventData.categoryId){eventData.categoryId = +eventData.categoryId}
     const event = await repo.event.updateEvent({ id: +eventId }, eventData)
 
     // UPDATE facility
