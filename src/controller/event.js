@@ -39,6 +39,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
         districtId,
         subDistrictId,
         address,
+        address2,
         lat,
         long,
         ...eventData
@@ -74,7 +75,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     await repo.event.createFacility(facilityData)
 
     // CREATE event address
-    const eventAdressData = { provinceId, districtId, subDistrictId, address, lat, long, eventId: event.id }
+    const eventAdressData = { provinceId, districtId,address2, subDistrictId, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
         if (key !== "address") {
             eventAdressData[key] = +eventAdressData[key]
@@ -165,6 +166,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
         districtId,
         subDistrictId,
         address,
+        address2,
         lat,
         long,
         ...eventData
@@ -215,7 +217,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     fs.unlink(coverImage.path, () => {})
 
     // UPDATE Event address
-    const eventAdressData = { provinceId, districtId, subDistrictId, address, lat, long, eventId: event.id }
+    const eventAdressData = { provinceId, districtId, subDistrictId,address2, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
         if (key !== "address" && eventAdressData[key]) {
             eventAdressData[key] = +eventAdressData[key]
