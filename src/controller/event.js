@@ -17,6 +17,14 @@ exports.getEvent = utils.catchError(async (req, res, next) => {
     res.status(200).json(event)
 })
 
+exports.getinRange = utils.catchError(async (req, res, next) => {
+    const {firstDay, lastDay} = req.body
+    const a = req.body
+
+    const events = await repo.event.getRangeEvent(firstDay,lastDay)
+    res.status(200).json(events)
+})
+
 exports.createEvent = utils.catchError(async (req, res, next) => {
     const {
         food,
