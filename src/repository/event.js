@@ -1,8 +1,12 @@
 const prisma = require("../config/prisma")
+const today = new Date();
 
 // =========================================== BASIC CRUD ===================================
 module.exports.getAll = async () =>
     await prisma.event.findMany({
+        where:{startDate:{
+            gt: today
+        }},
         orderBy: { startDate: "asc" },
         include: {
             category: true,

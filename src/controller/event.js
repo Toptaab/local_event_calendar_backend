@@ -61,7 +61,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
 
     // CREATE event
     const event = await repo.event.createEvent(eventData)
-    
+
     // Delete image in public folder
     fs.unlink(coverImage[0].path, () => {})
 
@@ -117,7 +117,7 @@ module.exports.getAllInScope = utils.catchError(async (req, res, next) => {
 })
 
 module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
-    // console.log(req.body);
+    const today = new Date();
     const data = req.body
 
     const where = {}
@@ -145,7 +145,9 @@ module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
             where.EventFacility[value] = true
         }
     }
-
+    where.startDate = {
+        gt: today,
+    }
     // console.log(where);
 
     const events = await repo.event.getFilteredEvent(where)
