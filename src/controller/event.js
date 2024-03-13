@@ -175,20 +175,23 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     // Guard boolean and string
     if (eventData.isYearly === "true") {
         eventData.isYearly = true
-    } else {
+    } else if (eventData.isYearly === "false") {
         eventData.isYearly = false
     }
 
     // Delete oldimage
     const oldEvent = await repo.event.get({ id: +eventId })
-    const publicId = utils.getPubblicId(oldEvent.coverImage)
-    await utils.cloudinary.deleteImage(publicId)
+    if (oldEvent.coverImage.includes("local_event_path")) {
+        const publicId = utils.getPubblicId(oldEvent.coverImage)
+        await utils.cloudinary.deleteImage(publicId)
+    }
 
     // UPLOAD coverImage to Cloudinary
     const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path, coverImagePath)
     eventData.coverImage = coverImageUrl.secure_url
 
     // UPDATE event
+    eventData.categoryId = +eventData.categoryId
     const event = await repo.event.updateEvent({ id: +eventId }, eventData)
 
     // UPDATE facility
@@ -196,7 +199,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     for (key in facilityData) {
         if (facilityData[key] === "true") {
             facilityData[key] = true
-        } else {
+        } else if (facilityData[key] === "false") {
             facilityData[key] = false
         }
     }
@@ -206,10 +209,11 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     // UPDATE Event address
     const eventAdressData = { provinceId, districtId, subDistrictId, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
-        if (key !== "address") {
+        if (key !== "address" && eventAdressData[key]) {
             eventAdressData[key] = +eventAdressData[key]
         }
     }
+
     await repo.event.updateEventAddess({ eventId: +eventId }, eventAdressData)
 
     res.status(200).json({ message: "Update success" })
