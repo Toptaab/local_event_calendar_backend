@@ -200,6 +200,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     if (coverImage) {
         const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path, coverImagePath)
         eventData.coverImage = coverImageUrl.secure_url
+        fs.unlink(coverImage.path, () => {})
     }
 
     // UPDATE event
@@ -218,7 +219,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
         }
     }
     await repo.event.updateFacility({ eventId: +eventId }, facilityData)
-    fs.unlink(coverImage.path, () => {})
+
 
     // UPDATE Event address
     const eventAdressData = { provinceId, districtId, subDistrictId, address2, address, lat, long, eventId: event.id }
