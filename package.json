@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "node src/app.js",
+        "dev": "nodemon src/app.js",
+        "start": "node src/app.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "prisma": {
@@ -19,6 +20,7 @@
     },
     "dependencies": {
         "@prisma/client": "^5.10.2",
+        "axios": "^1.6.7",
         "bcryptjs": "^2.4.3",
         "cloudinary": "^2.0.2",
         "cors": "^2.8.5",
