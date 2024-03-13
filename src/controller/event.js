@@ -61,6 +61,9 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
 
     // CREATE event
     const event = await repo.event.createEvent(eventData)
+    
+    // Delete image in public folder
+    fs.unlink(coverImage[0].path, () => {})
 
     // CREATE Facility
     const facilityData = { petFriendly, wifi, entranceFee, prayerRoom, toilet, parking, medicalService, food }
@@ -84,22 +87,21 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     await repo.event.createEventAddess(eventAdressData)
 
     // UPLOAD eventImage to Cloudinary
-    const eventImageData = []
-    for (file of image) {
-        const { path } = file
-        const eventImageUrl = await utils.cloudinary.uploadImage(path, eventImagePath)
-        eventImageData.push({ eventId: event.id, image: eventImageUrl.secure_url })
+    if (image) {
+        const eventImageData = []
+        for (file of image) {
+            const { path } = file
+            const eventImageUrl = await utils.cloudinary.uploadImage(path, eventImagePath)
+            eventImageData.push({ eventId: event.id, image: eventImageUrl.secure_url })
+        }
+        // CREATE eventImage
+        await repo.eventImage.createEventImages(eventImageData)
+        for (file of image) {
+            const { path } = file
+            fs.unlink(path, () => {})
+        }
     }
 
-    // CREATE eventImage
-    await repo.eventImage.createEventImages(eventImageData)
-
-    // Delete image in public folder
-    fs.unlink(coverImage[0].path, () => {})
-    for (file of image) {
-        const { path } = file
-        fs.unlink(path, () => {})
-    }
     res.status(200).json(event.id)
 })
 
@@ -219,7 +221,6 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
         }
     }
     await repo.event.updateFacility({ eventId: +eventId }, facilityData)
-
 
     // UPDATE Event address
     const eventAdressData = { provinceId, districtId, subDistrictId, address2, address, lat, long, eventId: event.id }
