@@ -197,11 +197,15 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     }
 
     // UPLOAD coverImage to Cloudinary
-    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path, coverImagePath)
-    eventData.coverImage = coverImageUrl.secure_url
+    if (coverImage) {
+        const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path, coverImagePath)
+        eventData.coverImage = coverImageUrl.secure_url
+    }
 
     // UPDATE event
-    if(eventData.categoryId){eventData.categoryId = +eventData.categoryId}
+    if (eventData.categoryId) {
+        eventData.categoryId = +eventData.categoryId
+    }
     const event = await repo.event.updateEvent({ id: +eventId }, eventData)
 
     // UPDATE facility
