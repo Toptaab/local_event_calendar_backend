@@ -23,57 +23,55 @@ module.exports.login = utils.catchError(async (req, res, next) => {
 })
 
 module.exports.pushContent = utils.catchError(async (req, res, next) => {
-    
-    const Reminder = await repo.reminder.getAll()
+    const today = new Date()
+    const targetDate = new Date(today)
+    targetDate.setDate(today.getDate() + 7)
 
-    const flexMessage = {
-        to: "U2293b8a9d37350fa9e6690f592b7c8a5",
-        messages: [
-            {
-                type: "template",
-                altText: "This is a buttons template",
-                template: {
-                    type: "buttons",
-                    thumbnailImageUrl:
-                        "https://res.cloudinary.com/dxhpdgd6k/image/upload/v1710256886/local_event_path/cover-image/1710256882363221991454_tg5tid.png",
-                    imageAspectRatio: "rectangle",
-                    imageSize: "cover",
-                    imageBackgroundColor: "#FFFFFF",
-                    title: "Menu",
-                    text: "Please select",
-                    defaultAction: {
-                        type: "uri",
-                        label: "View detail",
-                        uri: "http://example.com/page/123",
+    const reminder = await repo.reminder.findReminder(today, targetDate)
+    let i = 0
+    while (i <= reminder.length - 1) {
+        if (reminder[i].user.lineToken) {
+            const daysLeft = utils.timeDifference(today, reminder[i].event.endDate)
+            const flexMessage = {
+                to: reminder[i].user.lineToken,
+                messages: [
+                    {
+                        type: "template",
+                        altText: "This is a buttons template",
+                        template: {
+                            type: "buttons",
+                            thumbnailImageUrl: reminder[i].event.coverImage,
+                            imageAspectRatio: "rectangle",
+                            imageSize: "cover",
+                            imageBackgroundColor: "#FFFFFF",
+                            title: reminder[i].event.title,
+                            text: `Your event will start in ${daysLeft} ${daysLeft > 1 ? "Days" : "Day"} `,
+                            defaultAction: {
+                                type: "uri",
+                                label: "View detail",
+                                uri: `http://localhost:5173/event/${reminder[i].event.id}`,
+                            },
+                            actions: [
+                                {
+                                    type: "uri",
+                                    label: "visit Site",
+                                    uri: `http://localhost:5173/event/${reminder[i].event.id}`,
+                                },
+                            ],
+                        },
                     },
-                    actions: [
-                        {
-                            type: "postback",
-                            label: "Buy",
-                            data: "action=buy&itemid=123",
-                        },
-                        {
-                            type: "postback",
-                            label: "Add to cart",
-                            data: "action=add&itemid=123",
-                        },
-                        {
-                            type: "uri",
-                            label: "View detail",
-                            uri: "http://example.com/page/123",
-                        },
-                    ],
+                ],
+            }
+
+            await axios.post("https://api.line.me/v2/bot/message/push", flexMessage, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.LINE_ACCESS_TOKEN}`,
                 },
-            },
-        ],
+            })
+        }
+        i += 1
     }
 
-    const result = await axios.post("https://api.line.me/v2/bot/message/push", flexMessage, {
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.LINE_ACCESS_TOKEN}`,
-        },
-    })
-
-    res.status(200).json(result)
+    res.status(200).json({ message: "ok" })
 })
