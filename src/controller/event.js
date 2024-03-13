@@ -18,10 +18,10 @@ exports.getEvent = utils.catchError(async (req, res, next) => {
 })
 
 exports.getinRange = utils.catchError(async (req, res, next) => {
-    const {firstDay, lastDay} = req.body
+    const { firstDay, lastDay } = req.body
     const a = req.body
 
-    const events = await repo.event.getRangeEvent(firstDay,lastDay)
+    const events = await repo.event.getRangeEvent(firstDay, lastDay)
     res.status(200).json(events)
 })
 
@@ -75,9 +75,9 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     await repo.event.createFacility(facilityData)
 
     // CREATE event address
-    const eventAdressData = { provinceId, districtId,address2, subDistrictId, address, lat, long, eventId: event.id }
+    const eventAdressData = { provinceId, districtId, address2, subDistrictId, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
-        if (key !== "address") {
+        if (key !== "address" || key !== "address2") {
             eventAdressData[key] = +eventAdressData[key]
         }
     }
@@ -217,9 +217,9 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     fs.unlink(coverImage.path, () => {})
 
     // UPDATE Event address
-    const eventAdressData = { provinceId, districtId, subDistrictId,address2, address, lat, long, eventId: event.id }
+    const eventAdressData = { provinceId, districtId, subDistrictId, address2, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
-        if (key !== "address" && eventAdressData[key]) {
+        if ((key !== "address" || key !== "address2") && eventAdressData[key]) {
             eventAdressData[key] = +eventAdressData[key]
         }
     }
