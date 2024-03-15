@@ -118,10 +118,7 @@ module.exports.getAllInScope = utils.catchError(async (req, res, next) => {
     const { _southWest, _northEast } = req.body
     const { lat: minLat, lng: minLon } = _southWest
     const { lat: maxLat, lng: maxLon } = _northEast
-
     const allEvent = await repo.event.getAllInScope({ minLat, minLon, maxLat, maxLon })
-    console.log(allEvent)
-
     res.status(200).json(allEvent)
 })
 
@@ -157,10 +154,9 @@ module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
     where.startDate = {
         gt: today,
     }
-    // console.log(where);
+
 
     const events = await repo.event.getFilteredEvent(where)
-    // console.log(events);
 
     res.status(200).json(events)
 })
