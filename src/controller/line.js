@@ -13,10 +13,10 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
         case "text":
             switch (req.body.events[0].message.text) {
                 case "highlight":
-                    const highlight = repo.event.getHighlight()
+                    // const highlight = repo.event.getHighlight()
 
                     const flexMessage = {
-                        to: reminder[i].user.lineToken,
+                        to: req.body.events[0].source,
                         messages: [
                             {
                                 "type": "template",
