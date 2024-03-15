@@ -13,82 +13,29 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
         case "text":
             switch (req.body.events[0].message.text) {
                 case "highlight":
-                    // const highlight = repo.event.getHighlight()
-
-                    const flexMessage = {
-                        to: req.body.events[0].source.userId,
-                        messages: [
-                            {
-                                "type": "template",
-                                "altText": "this is a carousel template",
-                                "template": {
-                                  "type": "carousel",
-                                  "columns": [
-                                    {
-                                      "thumbnailImageUrl": "https://example.com/bot/images/item1.jpg",
-                                      "imageBackgroundColor": "#FFFFFF",
-                                      "title": "this is menu",
-                                      "text": "description",
-                                      "defaultAction": {
-                                        "type": "uri",
-                                        "label": "View detail",
-                                        "uri": "http://example.com/page/123"
-                                      },
-                                      "actions": [
-                                        {
-                                          "type": "postback",
-                                          "label": "Buy",
-                                          "data": "action=buy&itemid=111"
-                                        },
-                                        {
-                                          "type": "postback",
-                                          "label": "Add to cart",
-                                          "data": "action=add&itemid=111"
-                                        },
-                                        {
-                                          "type": "uri",
-                                          "label": "View detail",
-                                          "uri": "http://example.com/page/111"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "thumbnailImageUrl": "https://example.com/bot/images/item2.jpg",
-                                      "imageBackgroundColor": "#000000",
-                                      "title": "this is menu",
-                                      "text": "description",
-                                      "defaultAction": {
-                                        "type": "uri",
-                                        "label": "View detail",
-                                        "uri": "http://example.com/page/222"
-                                      },
-                                      "actions": [
-                                        {
-                                          "type": "postback",
-                                          "label": "Buy",
-                                          "data": "action=buy&itemid=222"
-                                        },
-                                        {
-                                          "type": "postback",
-                                          "label": "Add to cart",
-                                          "data": "action=add&itemid=222"
-                                        },
-                                        {
-                                          "type": "uri",
-                                          "label": "View detail",
-                                          "uri": "http://example.com/page/222"
-                                        }
-                                      ]
-                                    }
-                                  ],
-                                  "imageAspectRatio": "rectangle",
-                                  "imageSize": "cover"
-                                }
-                              }
-                        ],
-                    }
-
-                    await axios.post("https://api.line.me/v2/bot/message/push", flexMessage, {
+                    const highlight = await repo.event.getHighlight()
+                    const message = []
+                    highlight.map((value) =>
+                        message.push({
+                            thumbnailImageUrl: value.event.coverImage,
+                            imageBackgroundColor: "#FFFFFF",
+                            title: value.event.title,
+                            text: value.event.description.slice(0, 10) + "...",
+                            defaultAction: {
+                                type: "uri",
+                                label: "View detail",
+                                uri: `https://local-event-calendar-frontend.vercel.app/event/${value.event.id}`,
+                            },
+                            actions: [
+                                {
+                                    type: "uri",
+                                    label: "visit site",
+                                    uri: `https://local-event-calendar-frontend.vercel.app/event/${value.event.id}`,
+                                },
+                            ],
+                        }),
+                    )
+                    await axios.post("https://api.line.me/v2/bot/message/push", message, {
                         headers: {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${process.env.LINE_ACCESS_TOKEN}`,
@@ -182,6 +129,3 @@ module.exports.pushContent = utils.catchError(async (req, res, next) => {
 
     res.status(200).json({ message: "ok" })
 })
-
-
-
