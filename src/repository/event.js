@@ -1,5 +1,7 @@
 const prisma = require("../config/prisma")
 const today = new Date();
+const targetDate = new Date(today)
+
 
 // =========================================== BASIC CRUD ===================================
 module.exports.getAll = async () =>
@@ -16,6 +18,26 @@ module.exports.getAll = async () =>
             organizerInformation: { select: { officialName: true } },
         },
     })
+
+
+    
+    module.exports.getAllUpcomimng = async (targetDate) => await prisma.event.findMany({
+        where:{startDate:{
+            gt: today,
+            lt: targetDate
+        }},
+        orderBy: { startDate: "asc" },
+        include: {
+            category: true,
+            EventFacility: true,
+            EventAddress: true,
+            organizerInformation: { select: { officialName: true } },
+        },
+    })
+
+
+
+
 
 module.exports.get = async (where) =>
     await prisma.event.findFirst({

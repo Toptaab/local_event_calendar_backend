@@ -10,6 +10,15 @@ exports.getAll = utils.catchError(async (req, res, next) => {
     res.status(200).json(allEvent)
 })
 
+exports.getAllUpcomimng = utils.catchError(async (req, res, next) => {
+    const today = new Date();
+    const targetDate = new Date(today)
+    targetDate.setDate(today.getDate() + 30)
+
+    const AllUpcomimng = await repo.event.getAllUpcomimng(targetDate)
+    res.status(200).json(AllUpcomimng)
+})
+
 exports.getEvent = utils.catchError(async (req, res, next) => {
     const { eventId } = req.params
 

@@ -10,9 +10,10 @@ const eventRoute = express.Router()
 
 // ============================== done ============================//
 eventRoute.get('/',c.event.getAll)
+eventRoute.get('/upcoming',c.event.getAllUpcomimng)
 eventRoute.get('/:eventId',c.event.getEvent)
-eventRoute.post('/inRange',c.event.getinRange)
 eventRoute.post('/',authentication,upload.fields([{name: 'coverImage',maxCount: 1},{name: 'image'}]), c.event.createEvent)
+eventRoute.post('/inRange',c.event.getinRange)
 eventRoute.post('/scope',c.event.getAllInScope)
 eventRoute.post('/filter',c.event.getFilteredEvent)
 eventRoute.put('/:eventId',authentication,upload.single('coverImage'), c.event.updateEvent) // update onlt information and coverImage

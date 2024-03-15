@@ -48,6 +48,7 @@ module.exports.login = utils.catchError(async (req, res, nexr) => {
 module.exports.register = utils.catchError(async (req, res, next) => {
     const { profileImage, identityCopyImage } = req.files
     const { userName, password, email, lineToken, gender, role } = req.body
+
     //GUARD
     //VALIDATION CONFLICT email
     const existEmail = await repo.user.getUser({ email })
@@ -119,44 +120,67 @@ module.exports.register = utils.catchError(async (req, res, next) => {
     res.status(200).json({ accessToken })
 })
 
-
-module.exports.createReminder = utils.catchError(async(req,res,next) => {
+module.exports.update = utils.catchError(async (req, res, next) => {
     const { id } = req.user
-    const { eventId } = req.params
-    await repo.reminder.createReminder({userId: +id, eventId: +eventId})
-    res.status(200).json({message: "set remider success"})
+    const { profileImage } = req.files
+    const { userName, email, password, ...userAddress } = req.body
+    const userData = {userName,email}
+
+    //GUARD
+    //VALIDATION CONFLICT email
+    const existEmail = await repo.user.getUser({ email })
+    if (existEmail) {
+        throw new CustomError("this email has aleady been used", "CONFLICT_USER", 400)
+    }
+
+    // upload profile image
+    if (profileImage) {
+    // Delete oldimage
+    const user = await repo.event.get({ id: +id })
+    if (user.profileImage.includes("local_event_path")) {
+        const publicId = utils.getPubblicId(oldEvent.coverImage)
+        await utils.cloudinary.deleteImage(publicId)
+    }
+        profileImage = await utils.cloudinary.uploadImage(profileImage.path, profilePath)
+        userData.profileImage = profileImage.secure_url
+        fs.unlink(profileImage.path, () => {})
+    }
+    // UPDATE user 
+    await repo.user.update({id: +id},{userData})
+
+
+    // UPDATE user Address
+    userAddress.userId = id
+    for (const key in userAddress) {
+        if (key !== "address" || key !== "address2") {
+            userAddress[key] = +userAddress[key]
+        }
+    }
+
+    await res.status(200).json({ message: "Update Success" })
 })
 
-module.exports.deleteReminder = utils.catchError(async(req,res,next) => {
+
+
+
+// =========================================== Reminder ====================================== //
+
+module.exports.createReminder = utils.catchError(async (req, res, next) => {
     const { id } = req.user
     const { eventId } = req.params
-    await repo.reminder.deleteReminder({userId:+id},{eventId: +eventId})
-    res.status(200).json({message: "set remider success"})
+    await repo.reminder.createReminder({ userId: +id, eventId: +eventId })
+    res.status(200).json({ message: "set remider success" })
 })
 
-
-
+module.exports.deleteReminder = utils.catchError(async (req, res, next) => {
+    const { id } = req.user
+    const { eventId } = req.params
+    await repo.reminder.deleteReminder({ userId: +id }, { eventId: +eventId })
+    res.status(200).json({ message: "set remider success" })
+})
 
 // =========================================== on going ====================================== //
 
-
-
-module.exports.update = utils.catchError(async (req, res, next) => {
-    const { userId } = req.params
-    const { profileImage, identityCopyImage } = req.files
-    const { userName, password, email, lineToken, gender } = req.body
-
-    const { firstName, lastName } = req.body
-    // const user = await repo.user.update({ id }, { firstName, lastName })
-})
-;async (req, res, next) => {
-    try {
-        res.status(200).json({ user })
-    } catch (err) {
-        next(err)
-    }
-    return
-}
 
 module.exports.delete = async (req, res, next) => {
     try {
