@@ -271,6 +271,15 @@ module.exports.deleteEvent = utils.catchError(async (req, res, next) => {
 
 // =========================================== HighLight ====================================== //
 
+
+exports.getHighlight = utils.catchError(async (req, res, next) => {
+
+    const highlightEvents = await repo.event.getHighlight()
+    res.status(200).json(highlightEvents)
+})
+
+
+
 module.exports.createHighlight = utils.catchError(async (req,res, next) => {
     const { id } = req.user
     const   {eventId}  = req.body
