@@ -11,7 +11,7 @@ exports.getAll = utils.catchError(async (req, res, next) => {
 })
 
 exports.getAllUpcomimng = utils.catchError(async (req, res, next) => {
-    const today = new Date();
+    const today = new Date()
     const targetDate = new Date(today)
     targetDate.setDate(today.getDate() + 30)
 
@@ -123,7 +123,7 @@ module.exports.getAllInScope = utils.catchError(async (req, res, next) => {
 })
 
 module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
-    const today = new Date();
+    const today = new Date()
     const data = req.body
 
     const where = {}
@@ -154,7 +154,6 @@ module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
     where.startDate = {
         gt: today,
     }
-
 
     const events = await repo.event.getFilteredEvent(where)
 
@@ -232,7 +231,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     // UPDATE Event address
     const eventAdressData = { provinceId, districtId, subDistrictId, address2, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
-        if ((key !== "address" && key !== "address2") && eventAdressData[key]) {
+        if (key !== "address" && key !== "address2" && eventAdressData[key]) {
             eventAdressData[key] = +eventAdressData[key]
         }
     }
@@ -271,56 +270,49 @@ module.exports.deleteEvent = utils.catchError(async (req, res, next) => {
 
 // =========================================== HighLight ====================================== //
 
-
 exports.getHighlight = utils.catchError(async (req, res, next) => {
 
     const highlightEvents = await repo.event.getHighlight()
     res.status(200).json(highlightEvents)
 })
 
-
-
-module.exports.createHighlight = utils.catchError(async (req,res, next) => {
+module.exports.createHighlight = utils.catchError(async (req, res, next) => {
     const { id } = req.user
-    const   {eventId}  = req.body
+    const { eventId } = req.body
 
-    const admin = await repo.user.getUser({id})
-    if(admin.role !== ROLE.ADMIN){
+    const admin = await repo.user.getUser({ id })
+    if (admin.role !== ROLE.ADMIN) {
         throw new CustomError("No authorize to do it", "Invalid Authorization", 401)
     }
 
-    await repo.event.createHighlight({eventId})
+    await repo.event.createHighlight({ eventId })
 
-
-    res.status(200).json({message: "add Success"})
+    res.status(200).json({ message: "add Success" })
 })
 
-module.exports.deleteHighlight = utils.catchError(async (req,res, next) => {
+module.exports.deleteHighlight = utils.catchError(async (req, res, next) => {
     const { id } = req.user
-    const   {eventId}  = req.body
+    const { eventId } = req.body
 
-    const admin = await repo.user.getUser({id})
-    if(admin.role !== ROLE.ADMIN){
+    const admin = await repo.user.getUser({ id })
+    if (admin.role !== ROLE.ADMIN) {
         throw new CustomError("No authorize to do it", "Invalid Authorization", 401)
     }
 
-    await repo.event.deleteHighlight({eventId})
+    await repo.event.deleteHighlight({ eventId })
 
-
-    res.status(200).json({message: "Remove Success"})
+    res.status(200).json({ message: "Remove Success" })
 })
 
 // =========================================== feedBack ====================================== //
 
-module.exports.createFeedback = utils.catchError(async (req,res, next) => {
+module.exports.createFeedback = utils.catchError(async (req, res, next) => {
     const { id } = req.user
-    const {eventId}  = req.params
-    const {content, isLike} = req.body
-    const feedBackData = {userId:+id ,eventId:+eventId ,content,isLike}
-
+    const { eventId } = req.params
+    const { content, isLike } = req.body
+    const feedBackData = { userId: +id, eventId: +eventId, content, isLike }
 
     await repo.event.createFeedback(feedBackData)
 
-
-    res.status(200).json({message: "create Feedback Success"})
+    res.status(200).json({ message: "create Feedback Success" })
 })

@@ -9,33 +9,6 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
     console.log(req.body.events[0].source)
     console.log(req.body.events[0].message)
     console.log(req.body.events[0].message.text)
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     switch (req.body.events[0].message.type) {
         case "text":
             switch (req.body.events[0].message.text) {
@@ -72,7 +45,14 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                           "imageSize": "cover"
                         }
                       }
-                    await axios.post("https://api.line.me/v2/bot/message/push", Carousel, {
+                      const flexMessage = {
+                        to: req.body.events[0].source.userId,
+                        messages: [
+                            Carousel
+                        ],
+                    }
+
+                    await axios.post("https://api.line.me/v2/bot/message/push", [Carousel], {
                         headers: {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${process.env.LINE_ACCESS_TOKEN}`,
