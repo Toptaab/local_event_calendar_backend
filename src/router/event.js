@@ -11,6 +11,7 @@ const eventRoute = express.Router()
 // ============================== done ============================//
 eventRoute.get('/',c.event.getAll)
 eventRoute.get('/upcoming',c.event.getAllUpcomimng)
+eventRoute.get('/highlight',c.event.getHighlight)
 eventRoute.get('/:eventId',c.event.getEvent)
 eventRoute.post('/',authentication,upload.fields([{name: 'coverImage',maxCount: 1},{name: 'image'}]), c.event.createEvent)
 eventRoute.post('/inRange',c.event.getinRange)

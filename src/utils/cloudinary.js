@@ -9,7 +9,6 @@ module.exports.uploadImage = async (imagePath) => {
         const result = await cloudinary.uploader.upload(imagePath, {
             use_filename: true
         })
-        console.log(result)
         return result
     } catch (error) {
         console.error(error)
@@ -20,7 +19,6 @@ module.exports.deleteImage = async (publicId) => {
     try {
         const temp = publicId
         const result = await cloudinary.uploader.destroy(temp)
-
         console.log(result)
     } catch (error) {
         console.log(error)

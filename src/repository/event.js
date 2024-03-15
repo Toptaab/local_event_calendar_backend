@@ -113,21 +113,33 @@ module.exports.createFacility = async (data) => await prisma.eventFacility.creat
 module.exports.updateFacility = async (where, data) => await prisma.eventFacility.update({ where, data })
 module.exports.deleteFacility = async (where) => await prisma.eventFacility.delete({ where })
 
-
 // ============================================ event HighlightEvent ================================= //
+
+module.exports.getHighlight = async () =>
+    await prisma.highlightEvent.findMany({
+        include: {
+            event: {
+                include: {
+                    category: true,
+                    EventFacility: true,
+                    HighlightEvent: true,
+                    EventAddress: true,
+                    organizerInformation: { select: { officialName: true } },
+                },
+            },
+        },
+    })
 
 module.exports.deleteHighlightEvent = async (where) => prisma.highlightEvent.deleteMany({ where })
 
-
 // ============================================ event Highlight ======================================== //
 
-module.exports.createHighlight = async (data) => prisma.highlightEvent.create({data})
-module.exports.deleteHighlight = async (where) => prisma.highlightEvent.delete({where})
-
+module.exports.createHighlight = async (data) => prisma.highlightEvent.create({ data })
+module.exports.deleteHighlight = async (where) => prisma.highlightEvent.delete({ where })
 
 // ============================================ event feedBack ======================================== //
 
-module.exports.createFeedback = async (data) => prisma.eventFeedback.create({data})
+module.exports.createFeedback = async (data) => prisma.eventFeedback.create({ data })
 module.exports.deleteEventFeedback = async (where) => prisma.eventFeedback.deleteMany({ where })
 
 // ============================================ event statistic ======================================== //
