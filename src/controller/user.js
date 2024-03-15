@@ -2,7 +2,6 @@ const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
 const { Role } = require("@prisma/client")
-const { profilePath, IdentityPath } = require("../constant/cludinaryPath")
 const fs = require("fs")
 
 module.exports.getAll = utils.catchError(async (req, res, next) => {
@@ -74,7 +73,7 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 
     // upload profile image
     if (profileImage) {
-        profileResult = await utils.cloudinary.uploadImage(profileImage[0].path, profilePath)
+        profileResult = await utils.cloudinary.uploadImage(profileImage[0].path)
     }
 
     switch (role) {
@@ -90,7 +89,7 @@ module.exports.register = utils.catchError(async (req, res, next) => {
             user = await repo.user.create({ userName, password: hashed, email, role, gender, profileImage: profileResult.secure_url })
             const { officialName, corporation, companyNumber } = req.body
             if (identityCopyImage) {
-                identityCopyImageResult = await utils.cloudinary.uploadImage(identityCopyImage[0].path, IdentityPath)
+                identityCopyImageResult = await utils.cloudinary.uploadImage(identityCopyImage[0].path)
             }
             await repo.user.createOrganizerInfomation({
                 userId: +user.id,
@@ -122,7 +121,7 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 
 module.exports.update = utils.catchError(async (req, res, next) => {
     const { id } = req.user
-    const { profileImage } = req.files
+    const  profileImage  = req.file
     const { userName, email, password, ...userAddress } = req.body
     const userData = {userName,email}
 
@@ -136,26 +135,29 @@ module.exports.update = utils.catchError(async (req, res, next) => {
     // upload profile image
     if (profileImage) {
     // Delete oldimage
-    const user = await repo.event.get({ id: +id })
+    const user = await repo.user.getUser({ id: +id })
     if (user.profileImage.includes("local_event_path")) {
         const publicId = utils.getPubblicId(oldEvent.coverImage)
         await utils.cloudinary.deleteImage(publicId)
     }
-        profileImage = await utils.cloudinary.uploadImage(profileImage.path, profilePath)
-        userData.profileImage = profileImage.secure_url
+        const profileImageURL = await utils.cloudinary.uploadImage(profileImage.path)
+
+        userData.profileImage = profileImageURL.secure_url
         fs.unlink(profileImage.path, () => {})
     }
     // UPDATE user 
-    await repo.user.update({id: +id},{userData})
+    await repo.user.update({id: +id},userData)
 
 
     // UPDATE user Address
-    userAddress.userId = id
+   
     for (const key in userAddress) {
-        if (key !== "address" || key !== "address2") {
+        if (key !== 'address' && key !== 'address2') {
             userAddress[key] = +userAddress[key]
         }
     }
+    await repo.user.userAddressUpdate({userId: +id}, userAddress)
+    
 
     await res.status(200).json({ message: "Update Success" })
 })

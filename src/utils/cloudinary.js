@@ -1,13 +1,12 @@
 const cloudinary = require("../config/cloudinary")
 
-module.exports.uploadImage = async (imagePath, path) => {
+module.exports.uploadImage = async (imagePath) => {
     const options = {
         use_filename: true,
     }
     try {
         // Upload the image
         const result = await cloudinary.uploader.upload(imagePath, {
-            folder: path,
             use_filename: true
         })
         console.log(result)

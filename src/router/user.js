@@ -18,7 +18,7 @@ userRoute.post("/login", c.user.login)
 userRoute.post("/reminder/:eventId", authenticate , c.user.createReminder)
 userRoute.delete("/reminder/:eventId", authenticate , c.user.deleteReminder)
 userRoute.post("/register",upload.fields([{name: 'profileImage',maxCount: 1},{name: 'identityCopyImage', maxCount: 1}]) ,c.user.register)
-userRoute.put("/:userId",authentication,upload.single('profileImage') , c.user.update)
+userRoute.put("/",authentication,upload.single('profileImage') , c.user.update)
 
 // =============================== ongoing =======================//
 userRoute.delete("/:userId", authentication, c.user.delete)

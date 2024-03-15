@@ -65,7 +65,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     }
 
     // UPLOAD coverImage to Cloudinary
-    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage[0].path, coverImagePath)
+    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage[0].path)
     eventData.coverImage = coverImageUrl.secure_url
 
     // CREATE event
@@ -100,7 +100,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
         const eventImageData = []
         for (file of image) {
             const { path } = file
-            const eventImageUrl = await utils.cloudinary.uploadImage(path, eventImagePath)
+            const eventImageUrl = await utils.cloudinary.uploadImage(path)
             eventImageData.push({ eventId: event.id, image: eventImageUrl.secure_url })
         }
         // CREATE eventImage
@@ -211,7 +211,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
 
     // UPLOAD coverImage to Cloudinary
     if (coverImage) {
-        const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path, coverImagePath)
+        const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path)
         eventData.coverImage = coverImageUrl.secure_url
         fs.unlink(coverImage.path, () => {})
     }
