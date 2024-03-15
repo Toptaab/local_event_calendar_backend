@@ -54,7 +54,7 @@ module.exports = user = [
         email: "bank@gmail.com",
         role: ROLE.ORGANIZER,
         password: hashPassword,
-        gender: GENDER.MALE,
+        gender: GENDER.FEMALE,
         profileImage: "https://th.bing.com/th/id/OIP.QseD9dmPTFj_wRqT19aqZQHaFu?w=1500&h=1159&rs=1&pid=ImgDetMain",
     },
     {
@@ -68,7 +68,7 @@ module.exports = user = [
     {
         userName: "Happening Thailand",
         email: "happening@gmail.com",
-        role: ROLE.ORGANIZER,
+        role: ROLE.ADMIN,
         password: hashPassword,
         gender: GENDER.MALE,
         profileImage: "https://res-console.cloudinary.com/dxhpdgd6k/media_explorer_thumbnails/92901fd0dd79e5e406588814909f8e2c/detailed",

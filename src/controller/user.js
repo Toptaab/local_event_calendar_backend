@@ -122,7 +122,7 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 module.exports.update = utils.catchError(async (req, res, next) => {
     const { id } = req.user
     const profileImage = req.file
-    const { userName, email, password, ...userAddress } = req.body
+    const { userName, email, password, oldPassword, ...userAddress } = req.body
     const userData = { userName, email }
 
     //GUARD
@@ -131,11 +131,17 @@ module.exports.update = utils.catchError(async (req, res, next) => {
     if (existEmail) {
         throw new CustomError("this email has aleady been used", "CONFLICT_USER", 400)
     }
+    const user = await repo.user.getUser({ id: +id })
+
+    // COMPARE password with database
+    if (oldPassword) {
+        const result = await utils.bcrypt.compare(oldPassword, user.password)
+        if (!result) throw new CustomError("username or password is wrong", "WRONG_INPUT", 400)
+    }
 
     // upload profile image
     if (profileImage) {
         // Delete oldimage
-        const user = await repo.user.getUser({ id: +id })
         if (user.profileImage.includes("local_event_path")) {
             const publicId = utils.getPubblicId(oldEvent.coverImage)
             await utils.cloudinary.deleteImage(publicId)
@@ -145,7 +151,12 @@ module.exports.update = utils.catchError(async (req, res, next) => {
         userData.profileImage = profileImageURL.secure_url
         fs.unlink(profileImage.path, () => {})
     }
+
+    // HASHED PASSWORD
+    const hashed = await utils.bcrypt.hashed(password)
+
     // UPDATE user
+    userData.password = hashed
     await repo.user.update({ id: +id }, userData)
 
     // UPDATE user Address
