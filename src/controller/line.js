@@ -9,6 +9,8 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
     console.log(req.body.events[0].source)
     console.log(req.body.events[0].message)
     console.log(req.body.events[0].message.text)
+
+
     switch (req.body.events[0].message.type) {
         case "text":
             switch (req.body.events[0].message.text) {
@@ -52,7 +54,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                         ],
                     }
 
-                    await axios.post("https://api.line.me/v2/bot/message/push", [Carousel], {
+                    await axios.post("https://api.line.me/v2/bot/message/push", flexMessage, {
                         headers: {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${process.env.LINE_ACCESS_TOKEN}`,
