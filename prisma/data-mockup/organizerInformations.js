@@ -45,4 +45,10 @@ module.exports = organizerInformation = [
         corporation: CORPORATION.CORPORATION,
         identityCopyImage: identityImage,
     },
+    {
+        userId: 7,
+        officialName: "Happening Thailand",
+        corporation: CORPORATION.CORPORATION,
+        identityCopyImage: identityImage,
+    },
 ]

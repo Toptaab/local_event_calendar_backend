@@ -1,13 +1,22 @@
 const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
-const { coverImagePath, eventImagePath } = require("../constant/cludinaryPath")
 const fs = require("fs")
 const { FACILITY_LIST } = require("../constant")
+const { ROLE } = require("../constant/enum")
 
 exports.getAll = utils.catchError(async (req, res, next) => {
     const allEvent = await repo.event.getAll()
     res.status(200).json(allEvent)
+})
+
+exports.getAllUpcomimng = utils.catchError(async (req, res, next) => {
+    const today = new Date();
+    const targetDate = new Date(today)
+    targetDate.setDate(today.getDate() + 30)
+
+    const AllUpcomimng = await repo.event.getAllUpcomimng(targetDate)
+    res.status(200).json(AllUpcomimng)
 })
 
 exports.getEvent = utils.catchError(async (req, res, next) => {
@@ -56,7 +65,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     }
 
     // UPLOAD coverImage to Cloudinary
-    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage[0].path, coverImagePath)
+    const coverImageUrl = await utils.cloudinary.uploadImage(coverImage[0].path)
     eventData.coverImage = coverImageUrl.secure_url
 
     // CREATE event
@@ -80,7 +89,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     // CREATE event address
     const eventAdressData = { provinceId, districtId, address2, subDistrictId, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
-        if (key !== "address" || key !== "address2") {
+        if (key !== "address" && key !== "address2") {
             eventAdressData[key] = +eventAdressData[key]
         }
     }
@@ -91,7 +100,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
         const eventImageData = []
         for (file of image) {
             const { path } = file
-            const eventImageUrl = await utils.cloudinary.uploadImage(path, eventImagePath)
+            const eventImageUrl = await utils.cloudinary.uploadImage(path)
             eventImageData.push({ eventId: event.id, image: eventImageUrl.secure_url })
         }
         // CREATE eventImage
@@ -202,7 +211,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
 
     // UPLOAD coverImage to Cloudinary
     if (coverImage) {
-        const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path, coverImagePath)
+        const coverImageUrl = await utils.cloudinary.uploadImage(coverImage.path)
         eventData.coverImage = coverImageUrl.secure_url
         fs.unlink(coverImage.path, () => {})
     }
@@ -227,7 +236,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     // UPDATE Event address
     const eventAdressData = { provinceId, districtId, subDistrictId, address2, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
-        if ((key !== "address" || key !== "address2") && eventAdressData[key]) {
+        if ((key !== "address" && key !== "address2") && eventAdressData[key]) {
             eventAdressData[key] = +eventAdressData[key]
         }
     }
@@ -256,11 +265,57 @@ module.exports.deleteEvent = utils.catchError(async (req, res, next) => {
     await repo.eventImage.deleteEventImages({ eventId: +eventId })
     await repo.event.deleteEventAddess({ eventId: +eventId })
     await repo.event.deleteHighlightEvent({ eventId: +eventId })
-    await repo.event.deleteReport({ eventId: +eventId })
     await repo.reminder.deleteReminderByEventId({ eventId: +eventId })
     await repo.event.deleteEventFeedback({ eventId: +eventId })
     await repo.event.deleteFacility({ eventId: +eventId })
     await repo.event.deleteEvent({ id: +eventId })
 
     res.status(200).json({ message: "Delete success" })
+})
+
+// =========================================== HighLight ====================================== //
+
+module.exports.createHighlight = utils.catchError(async (req,res, next) => {
+    const { id } = req.user
+    const   {eventId}  = req.body
+
+    const admin = await repo.user.getUser({id})
+    if(admin.role !== ROLE.ADMIN){
+        throw new CustomError("No authorize to do it", "Invalid Authorization", 401)
+    }
+
+    await repo.event.createHighlight({eventId})
+
+
+    res.status(200).json({message: "add Success"})
+})
+
+module.exports.deleteHighlight = utils.catchError(async (req,res, next) => {
+    const { id } = req.user
+    const   {eventId}  = req.body
+
+    const admin = await repo.user.getUser({id})
+    if(admin.role !== ROLE.ADMIN){
+        throw new CustomError("No authorize to do it", "Invalid Authorization", 401)
+    }
+
+    await repo.event.deleteHighlight({eventId})
+
+
+    res.status(200).json({message: "Remove Success"})
+})
+
+// =========================================== feedBack ====================================== //
+
+module.exports.createFeedback = utils.catchError(async (req,res, next) => {
+    const { id } = req.user
+    const {eventId}  = req.params
+    const {content, isLike} = req.body
+    const feedBackData = {userId:+id ,eventId:+eventId ,content,isLike}
+
+
+    await repo.event.createFeedback(feedBackData)
+
+
+    res.status(200).json({message: "create Feedback Success"})
 })
