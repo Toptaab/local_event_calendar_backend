@@ -274,37 +274,8 @@ module.exports.deleteEvent = utils.catchError(async (req, res, next) => {
 
 exports.getHighlight = utils.catchError(async (req, res, next) => {
 
-    const highlight = await repo.event.getHighlight()
-    const message = []
-    highlight.map((value) => message.push({
-        thumbnailImageUrl: value.event.coverImage,
-        imageBackgroundColor: "#FFFFFF",
-        title: value.event.title,
-        text: value.event.description.slice(0,10) + "...",
-        defaultAction: {
-            type: "uri",
-            label: "View detail",
-            uri: `https://local-event-calendar-frontend.vercel.app/event/${value.event.id}`,
-        },
-        actions: [
-            {
-                type: "uri",
-                label: "visit site",
-                uri: `https://local-event-calendar-frontend.vercel.app/event/${value.event.id}`,
-            },
-        ],
-    }))
-
-
-
-
-
-
-
-
-
-    // const highlightEvents = await repo.event.getHighlight()
-    res.status(200).json(message)
+    const highlightEvents = await repo.event.getHighlight()
+    res.status(200).json(highlightEvents)
 })
 
 
