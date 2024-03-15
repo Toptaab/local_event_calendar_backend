@@ -16,7 +16,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                     // const highlight = repo.event.getHighlight()
 
                     const flexMessage = {
-                        to: req.body.events[0].source,
+                        to: req.body.events[0].source.userId,
                         messages: [
                             {
                                 "type": "template",
