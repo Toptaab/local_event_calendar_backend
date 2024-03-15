@@ -1,7 +1,6 @@
 const repo = require("../repository")
 const utils = require("../utils")
 const { CustomError } = require("../config/error")
-const { coverImagePath, eventImagePath } = require("../constant/cludinaryPath")
 const fs = require("fs")
 const { FACILITY_LIST } = require("../constant")
 const { ROLE } = require("../constant/enum")
@@ -273,7 +272,6 @@ module.exports.deleteEvent = utils.catchError(async (req, res, next) => {
 
     res.status(200).json({ message: "Delete success" })
 })
-
 
 // =========================================== HighLight ====================================== //
 
