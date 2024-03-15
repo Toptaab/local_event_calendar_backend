@@ -9,9 +9,25 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
     console.log(req.body.events[0].source)
     console.log(req.body.events[0].message)
     console.log(req.body.events[0].message.text)
-    switch (req.body.events[0].message.text) {
-        case "highlight":
-            console.log("highlight=============================================")
+    switch (req.body.events[0].message.type) {
+        case "text":
+            switch (req.body.events[0].message.text) {
+                case "highlight":
+                    console.log("highlight===========================")
+                    break
+                case "my event":
+                    console.log("my event===========================")
+                    break
+                case "upcomming":
+                    console.log("upcomming===========================")
+                    break
+                case "my reminder":
+                    console.log("upcomming===========================")
+                    break
+                default:
+                    break
+            }
+
             break
 
         default:
