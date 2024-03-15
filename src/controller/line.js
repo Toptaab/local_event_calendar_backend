@@ -5,8 +5,11 @@ require("dotenv").config()
 
 module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
     console.log(req.body)
+    console.log("==============================================================")
     console.log(req.body.events[0].source)
-    console.log(req.params)
+    console.log(req.body.message[0])
+    console.log(req.body.message[0].text)
+
 
     res.status(200).json({ message: "ok" })
 })
