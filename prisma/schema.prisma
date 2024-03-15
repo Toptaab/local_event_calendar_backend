@@ -36,7 +36,7 @@ model User {
   email                String
   isVerify             Boolean               @default(false) @map("is_verify")
   role                 Role                  @default(USER)
-  lineToken            String?               @db.Text @map("line_token")
+  lineToken            String?               @map("line_token") @db.Text
   password             String?               @db.VarChar(60)
   gender               Gender
   profileImage         String?               @map("profile_image") @db.Text
@@ -44,7 +44,6 @@ model User {
   updatedAt            DateTime              @updatedAt @map("updated_at") @db.Timestamp(0)
   UserAddress          UserAddress?
   OrganizerInformation OrganizerInformation?
-  report               Report[]
   Reminder             Reminder[]
   EventFeedback        EventFeedback[]
 
@@ -94,8 +93,6 @@ model Event {
   timePeriod             String               @map("time_period") @db.VarChar(20)
   isYearly               Boolean              @default(false) @map("is_yearly")
   isPublish              Boolean              @default(false) @map("is_publish")
-  themeId                Int?                 @map("theme_id")
-  theme                  Theme?               @relation(fields: [themeId], references: [id])
   categoryId             Int                  @map("category_id")
   category               Category             @relation(fields: [categoryId], references: [id])
   isExpired              Boolean              @default(false) @map("is_expired")
@@ -108,7 +105,6 @@ model Event {
   EventImage             EventImage[]
   EventAddress           EventAddress?
   HighlightEvent         HighlightEvent?
-  Report                 Report[]
   Reminder               Reminder?
   EventFeedback          EventFeedback[]
   EventFacility          EventFacility?
@@ -153,14 +149,6 @@ model Category {
   @@map("categies")
 }
 
-model Theme {
-  id    Int     @id @default(autoincrement())
-  name  String
-  Event Event[]
-
-  @@map("themes")
-}
-
 model EventFacility {
   id             Int     @id @default(autoincrement())
   eventId        Int     @unique @map("event_id")
@@ -172,7 +160,7 @@ model EventFacility {
   entranceFee    Boolean @default(false) @map("entrance_fee")
   wifi           Boolean @default(false)
   medicalService Boolean @default(false) @map("medical_service")
-  petFriendly      Boolean @default(false) @map("pet_friendly")
+  petFriendly    Boolean @default(false) @map("pet_friendly")
 
   @@map("event_facility")
 }
@@ -185,32 +173,14 @@ model HighlightEvent {
   @@map("highlight_event")
 }
 
-model Report {
-  id           Int    @id @default(autoincrement())
-  userId       Int    @map("user_id")
-  user         User   @relation(fields: [userId], references: [id])
-  eventId      Int    @map("event_id")
-  event        Event  @relation(fields: [eventId], references: [id])
-  reportTypeId Int    @map("report_type_id")
-  content      String @db.Text
-
-  @@map("reports")
-}
-
-model ReportTpye {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  @@map("report_types")
-}
-
 model EventFeedback {
-  id      Int    @id @default(autoincrement())
-  userId  Int    @map("user_id")
-  user    User   @relation(fields: [userId], references: [id])
-  eventId Int    @map("event_id")
-  event   Event  @relation(fields: [eventId], references: [id])
-  content String @db.Text
+  id      Int     @id @default(autoincrement())
+  userId  Int     @map("user_id")
+  user    User    @relation(fields: [userId], references: [id])
+  eventId Int     @map("event_id")
+  event   Event   @relation(fields: [eventId], references: [id])
+  content String  @db.Text
+  isLike  Boolean @default(false)
 
   @@map("event_feedback")
 }
@@ -219,7 +189,7 @@ model Reminder {
   id      Int   @id @default(autoincrement())
   userId  Int   @map("user_id")
   user    User  @relation(fields: [userId], references: [id])
-  eventId Int   @map("event_id") @unique
+  eventId Int   @unique @map("event_id")
   event   Event @relation(fields: [eventId], references: [id])
 
   @@map("reminders")

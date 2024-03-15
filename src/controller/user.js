@@ -121,9 +121,9 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 
 module.exports.update = utils.catchError(async (req, res, next) => {
     const { id } = req.user
-    const  profileImage  = req.file
+    const profileImage = req.file
     const { userName, email, password, ...userAddress } = req.body
-    const userData = {userName,email}
+    const userData = { userName, email }
 
     //GUARD
     //VALIDATION CONFLICT email
@@ -134,36 +134,31 @@ module.exports.update = utils.catchError(async (req, res, next) => {
 
     // upload profile image
     if (profileImage) {
-    // Delete oldimage
-    const user = await repo.user.getUser({ id: +id })
-    if (user.profileImage.includes("local_event_path")) {
-        const publicId = utils.getPubblicId(oldEvent.coverImage)
-        await utils.cloudinary.deleteImage(publicId)
-    }
+        // Delete oldimage
+        const user = await repo.user.getUser({ id: +id })
+        if (user.profileImage.includes("local_event_path")) {
+            const publicId = utils.getPubblicId(oldEvent.coverImage)
+            await utils.cloudinary.deleteImage(publicId)
+        }
         const profileImageURL = await utils.cloudinary.uploadImage(profileImage.path)
 
         userData.profileImage = profileImageURL.secure_url
         fs.unlink(profileImage.path, () => {})
     }
-    // UPDATE user 
-    await repo.user.update({id: +id},userData)
-
+    // UPDATE user
+    await repo.user.update({ id: +id }, userData)
 
     // UPDATE user Address
-   
+
     for (const key in userAddress) {
-        if (key !== 'address' && key !== 'address2') {
+        if (key !== "address" && key !== "address2" && eventAdressData[key]) {
             userAddress[key] = +userAddress[key]
         }
     }
-    await repo.user.userAddressUpdate({userId: +id}, userAddress)
-    
+    await repo.user.userAddressUpdate({ userId: +id }, userAddress)
 
     await res.status(200).json({ message: "Update Success" })
 })
-
-
-
 
 // =========================================== Reminder ====================================== //
 
@@ -183,14 +178,31 @@ module.exports.deleteReminder = utils.catchError(async (req, res, next) => {
 
 // =========================================== on going ====================================== //
 
-
-module.exports.delete = async (req, res, next) => {
-    try {
-        const { id } = req.params
-        await repo.user.delete({ id })
-        res.status(200)
-    } catch (err) {
-        next(err)
+module.exports.getCount = utils.catchError(async (req, res, next) => {
+    const { id } = req.user
+    const admin = await repo.user.getUser({ id })
+    if (admin.role !== Role.ADMIN) {
+        throw new CustomError("No authorize to do it", "Invalid Authorization", 401)
     }
-    return
-}
+    const statistics = {}
+    // statistics.event = {}
+    // statistics.event = await repo.event.getMonthEvent(rawQuery)
+
+    statistics.user = {}
+    statistics.user.total = await repo.user.getCount()
+    statistics.user.user = await repo.user.getCount({ role: Role.USER })
+    statistics.user.organizer = await repo.user.getCount({ role: Role.ORGANIZER })
+
+    res.status(200).json(statistics)
+})
+
+// module.exports.delete = async (req, res, next) => {
+//     try {
+//         const { id } = req.params
+//         await repo.user.delete({ id })
+//         res.status(200)
+//     } catch (err) {
+//         next(err)
+//     }
+//     return
+// }

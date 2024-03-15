@@ -16,7 +16,10 @@ eventRoute.post('/',authentication,upload.fields([{name: 'coverImage',maxCount: 
 eventRoute.post('/inRange',c.event.getinRange)
 eventRoute.post('/scope',c.event.getAllInScope)
 eventRoute.post('/filter',c.event.getFilteredEvent)
+eventRoute.post('/highlight',authentication,c.event.createHighlight)
+eventRoute.post('/:eventId/feedback',authentication,c.event.createFeedback)
 eventRoute.put('/:eventId',authentication,upload.single('coverImage'), c.event.updateEvent) // update onlt information and coverImage
+eventRoute.delete('/highlight',authentication,c.event.deleteHighlight)
 eventRoute.delete('/:eventId',authentication,c.event.deleteEvent) 
 
 // =============================== ongoing =======================//

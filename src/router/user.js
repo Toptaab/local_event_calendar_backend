@@ -13,6 +13,7 @@ const userRoute = express.Router()
 
 userRoute.get("/", c.user.getAll)
 userRoute.get("/auth",authentication ,c.user.authMe)
+userRoute.get("/statistic",authentication, c.user.getCount)
 userRoute.get("/:userId", c.user.getUser)
 userRoute.post("/login", c.user.login)
 userRoute.post("/reminder/:eventId", authenticate , c.user.createReminder)
@@ -21,6 +22,6 @@ userRoute.post("/register",upload.fields([{name: 'profileImage',maxCount: 1},{na
 userRoute.put("/",authentication,upload.single('profileImage') , c.user.update)
 
 // =============================== ongoing =======================//
-userRoute.delete("/:userId", authentication, c.user.delete)
+// userRoute.delete("/:userId", authentication, c.user.delete)
 
 module.exports = userRoute

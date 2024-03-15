@@ -1,14 +1,15 @@
 const prisma = require("../config/prisma")
-const today = new Date();
+const today = new Date()
 const targetDate = new Date(today)
-
 
 // =========================================== BASIC CRUD ===================================
 module.exports.getAll = async () =>
     await prisma.event.findMany({
-        where:{startDate:{
-            gt: today
-        }},
+        where: {
+            startDate: {
+                gt: today,
+            },
+        },
         orderBy: { startDate: "asc" },
         include: {
             category: true,
@@ -19,13 +20,14 @@ module.exports.getAll = async () =>
         },
     })
 
-
-    
-    module.exports.getAllUpcomimng = async (targetDate) => await prisma.event.findMany({
-        where:{startDate:{
-            gt: today,
-            lt: targetDate
-        }},
+module.exports.getAllUpcomimng = async (targetDate) =>
+    await prisma.event.findMany({
+        where: {
+            startDate: {
+                gt: today,
+                lt: targetDate,
+            },
+        },
         orderBy: { startDate: "asc" },
         include: {
             category: true,
@@ -35,16 +37,11 @@ module.exports.getAll = async () =>
         },
     })
 
-
-
-
-
 module.exports.get = async (where) =>
     await prisma.event.findFirst({
         where,
         include: {
             category: true,
-            Report: true,
             EventFeedback: true,
             EventImage: true,
             EventFacility: true,
@@ -116,14 +113,23 @@ module.exports.createFacility = async (data) => await prisma.eventFacility.creat
 module.exports.updateFacility = async (where, data) => await prisma.eventFacility.update({ where, data })
 module.exports.deleteFacility = async (where) => await prisma.eventFacility.delete({ where })
 
-// ============================================ event Feedback ======================================= //
-
-module.exports.deleteEventFeedback = async (where) => prisma.eventFeedback.deleteMany({ where })
 
 // ============================================ event HighlightEvent ================================= //
 
 module.exports.deleteHighlightEvent = async (where) => prisma.highlightEvent.deleteMany({ where })
 
-// ============================================ event Report ======================================== //
 
-module.exports.deleteReport = async (where) => prisma.report.deleteMany({ where })
+// ============================================ event Highlight ======================================== //
+
+module.exports.createHighlight = async (data) => prisma.highlightEvent.create({data})
+module.exports.deleteHighlight = async (where) => prisma.highlightEvent.delete({where})
+
+
+// ============================================ event feedBack ======================================== //
+
+module.exports.createFeedback = async (data) => prisma.eventFeedback.create({data})
+module.exports.deleteEventFeedback = async (where) => prisma.eventFeedback.deleteMany({ where })
+
+// ============================================ event statistic ======================================== //
+
+// module.exports.getMonthEvent = async (rawQuery) => prisma.$queryRawUnsafe(rawQuery)

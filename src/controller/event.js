@@ -4,6 +4,7 @@ const { CustomError } = require("../config/error")
 const { coverImagePath, eventImagePath } = require("../constant/cludinaryPath")
 const fs = require("fs")
 const { FACILITY_LIST } = require("../constant")
+const { ROLE } = require("../constant/enum")
 
 exports.getAll = utils.catchError(async (req, res, next) => {
     const allEvent = await repo.event.getAll()
@@ -89,7 +90,7 @@ exports.createEvent = utils.catchError(async (req, res, next) => {
     // CREATE event address
     const eventAdressData = { provinceId, districtId, address2, subDistrictId, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
-        if (key !== "address" || key !== "address2") {
+        if (key !== "address" && key !== "address2") {
             eventAdressData[key] = +eventAdressData[key]
         }
     }
@@ -236,7 +237,7 @@ module.exports.updateEvent = utils.catchError(async (req, res, next) => {
     // UPDATE Event address
     const eventAdressData = { provinceId, districtId, subDistrictId, address2, address, lat, long, eventId: event.id }
     for (const key in eventAdressData) {
-        if ((key !== "address" || key !== "address2") && eventAdressData[key]) {
+        if ((key !== "address" && key !== "address2") && eventAdressData[key]) {
             eventAdressData[key] = +eventAdressData[key]
         }
     }
@@ -265,11 +266,58 @@ module.exports.deleteEvent = utils.catchError(async (req, res, next) => {
     await repo.eventImage.deleteEventImages({ eventId: +eventId })
     await repo.event.deleteEventAddess({ eventId: +eventId })
     await repo.event.deleteHighlightEvent({ eventId: +eventId })
-    await repo.event.deleteReport({ eventId: +eventId })
     await repo.reminder.deleteReminderByEventId({ eventId: +eventId })
     await repo.event.deleteEventFeedback({ eventId: +eventId })
     await repo.event.deleteFacility({ eventId: +eventId })
     await repo.event.deleteEvent({ id: +eventId })
 
     res.status(200).json({ message: "Delete success" })
+})
+
+
+// =========================================== HighLight ====================================== //
+
+module.exports.createHighlight = utils.catchError(async (req,res, next) => {
+    const { id } = req.user
+    const   {eventId}  = req.body
+
+    const admin = await repo.user.getUser({id})
+    if(admin.role !== ROLE.ADMIN){
+        throw new CustomError("No authorize to do it", "Invalid Authorization", 401)
+    }
+
+    await repo.event.createHighlight({eventId})
+
+
+    res.status(200).json({message: "add Success"})
+})
+
+module.exports.deleteHighlight = utils.catchError(async (req,res, next) => {
+    const { id } = req.user
+    const   {eventId}  = req.body
+
+    const admin = await repo.user.getUser({id})
+    if(admin.role !== ROLE.ADMIN){
+        throw new CustomError("No authorize to do it", "Invalid Authorization", 401)
+    }
+
+    await repo.event.deleteHighlight({eventId})
+
+
+    res.status(200).json({message: "Remove Success"})
+})
+
+// =========================================== feedBack ====================================== //
+
+module.exports.createFeedback = utils.catchError(async (req,res, next) => {
+    const { id } = req.user
+    const {eventId}  = req.params
+    const {content, isLike} = req.body
+    const feedBackData = {userId:+id ,eventId:+eventId ,content,isLike}
+
+
+    await repo.event.createFeedback(feedBackData)
+
+
+    res.status(200).json({message: "create Feedback Success"})
 })
