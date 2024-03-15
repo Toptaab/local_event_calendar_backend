@@ -92,7 +92,7 @@ module.exports = events = [
         isExpired: false,
     },
     {
-        organizerInformationId: 2,
+        organizerInformationId: 7,
         coverImage: "https://4.bp.blogspot.com/-EMvD6vUHTIA/VgFIN8ROxBI/AAAAAAAAOos/3CA4UOnhiiw/s1600/Diner%2Bgrand%2Bchefs.png",
         title: "Gastronomy Gala",
         description: "A culinary journey around the world",
@@ -118,7 +118,7 @@ module.exports = events = [
         isExpired: false,
     },
     {
-        organizerInformationId: 4,
+        organizerInformationId: 7,
         coverImage: "https://th.bing.com/th/id/OIP.z_HjQ5K5e_LVRLDKO_1jXQHaE8?rs=1&pid=ImgDetMain",
         title: "Fashion Fiesta",
         description: "A showcase of style and trends",
@@ -157,7 +157,7 @@ module.exports = events = [
         isExpired: false,
     },
     {
-        organizerInformationId: 1,
+        organizerInformationId: 7,
         coverImage: "https://th.bing.com/th/id/OIP.na7waxfAEiF8AQSI2Q-HogHaEg?rs=1&pid=ImgDetMain",
         title: "Tech Summit",
         description: "Exploring the future of technology",
@@ -200,7 +200,7 @@ module.exports = events = [
     },
 
     {
-        organizerInformationId: 2,
+        organizerInformationId: 7,
         coverImage: "https://images.pexels.com/photos/625789/pexels-photo-625789.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         title: "Yee Peng Lanna",
         description:
@@ -230,7 +230,7 @@ module.exports = events = [
     },
 
     {
-        organizerInformationId: 4,
+        organizerInformationId: 7,
         coverImage: "http://chiangraiballoonfiesta.com/assets/base/img/content/gallery/feb2018/28.jpg",
         title: "Singha Park Ballon Festival",
         description:
@@ -276,7 +276,7 @@ module.exports = events = [
     },
 
     {
-        organizerInformationId: 1,
+        organizerInformationId: 7,
         coverImage: "https://mpics.mgronline.com/pics/Images/566000009624503.JPEG",
         title: "Phuket Vegeterian Festival",
         description:
@@ -306,7 +306,7 @@ module.exports = events = [
     },
 
     {
-        organizerInformationId: 3,
+        organizerInformationId: 7,
         coverImage: "https://cdn.i-scmp.com/sites/default/files/d8/images/canvas/2023/04/03/8cb12ab6-e927-4b3f-b754-cac99e33d64f_c6f7589c.jpg",
         title: "Songkran Festival",
         description:
@@ -350,7 +350,7 @@ module.exports = events = [
     },
 
     {
-        organizerInformationId: 6,
+        organizerInformationId: 7,
         coverImage: "https://www.theakyra.com/files/5015/7043/7475/Bo_Sang_Umbrella_Festival.jpg",
         title: "Full moon PhaNgarn island",
         description:
@@ -410,7 +410,7 @@ module.exports = events = [
     },
 
     {
-        organizerInformationId: 4,
+        organizerInformationId: 7,
         coverImage: "https://pbs.twimg.com/media/GHM43aqaoAASopM?format=jpg&name=900x900",
         title: "Khao Wong Prajan Light up",
         description:
@@ -455,7 +455,7 @@ module.exports = events = [
     },
 
     {
-        organizerInformationId: 1,
+        organizerInformationId: 7,
         coverImage:
             "https://scontent.fbkk7-3.fna.fbcdn.net/v/t31.18172-8/18238565_1683026615048444_7055562275172768252_o.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=mYgcPbmMyhoAX_qBHLv&_nc_oc=AQk47M-mASY1KGX_UNOfQSEe6-77Z_501_uh2Ku9PSp9Yd729PJhr0BtljqY7KkSi-Y&_nc_ht=scontent.fbkk7-3.fna&oh=00_AfCwUIdF1hRDheKCE6cleedvySo9m1dEGDObkAKjNbWNPg&oe=660FBADA",
         title: "Water Thai Boxing",
@@ -502,7 +502,7 @@ module.exports = events = [
     },
 
     {
-        organizerInformationId: 4,
+        organizerInformationId: 7,
         coverImage: "https://mpics.mgronline.com/pics/Images/557000003809501.JPEG",
         title: "Tractor racing",
         description:

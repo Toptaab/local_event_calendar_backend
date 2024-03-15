@@ -13,14 +13,15 @@ const userRoute = express.Router()
 
 userRoute.get("/", c.user.getAll)
 userRoute.get("/auth",authentication ,c.user.authMe)
+userRoute.get("/statistic",authentication, c.user.getCount)
 userRoute.get("/:userId", c.user.getUser)
 userRoute.post("/login", c.user.login)
 userRoute.post("/reminder/:eventId", authenticate , c.user.createReminder)
 userRoute.delete("/reminder/:eventId", authenticate , c.user.deleteReminder)
 userRoute.post("/register",upload.fields([{name: 'profileImage',maxCount: 1},{name: 'identityCopyImage', maxCount: 1}]) ,c.user.register)
+userRoute.put("/",authentication,upload.single('profileImage') , c.user.update)
 
 // =============================== ongoing =======================//
-userRoute.put("/:userId",authentication,upload.fields([{name: 'profileImage',maxCount: 1},{name: 'identityCopyImage', maxCount: 1}]) , c.user.update)
-userRoute.delete("/:userId", authentication, c.user.delete)
+// userRoute.delete("/:userId", authentication, c.user.delete)
 
 module.exports = userRoute

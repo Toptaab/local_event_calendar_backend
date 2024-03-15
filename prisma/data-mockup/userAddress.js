@@ -49,6 +49,14 @@ module.exports = userAddress= [
             provinceId: 84,
             districtId: 8404,
             subDistrictId: 840401
+        },
+        {
+            userId: 7,
+            address: "789/123 Moo 5, Ang Thong Subdistrict, Koh Samui District, Surat Thani Province, Thailand",
+            address2: "400 , Ang Thong Subdistrict, Koh Samui District, Surat Thani Province, Thailand",
+            provinceId: 84,
+            districtId: 8404,
+            subDistrictId: 840401
         }
     ]
 
