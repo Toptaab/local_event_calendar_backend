@@ -122,16 +122,8 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 module.exports.update = utils.catchError(async (req, res, next) => {
     const { id } = req.user
     const profileImage = req.file
-    const { userName, email, password, oldPassword, ...userAddress } = req.body
-    const userData = { userName, email }
-
-    //GUARD
-    //VALIDATION CONFLICT email
-    const existEmail = await repo.user.getUser({ email })
-    if (existEmail) {
-        throw new CustomError("this email has aleady been used", "CONFLICT_USER", 400)
-    }
-    const user = await repo.user.getUser({ id: +id })
+    const { userName, password, oldPassword, ...userAddress } = req.body
+    const userData = { userName }
 
     // COMPARE password with database
     if (oldPassword) {

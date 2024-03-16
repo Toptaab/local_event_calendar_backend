@@ -269,7 +269,6 @@ module.exports.deleteEvent = utils.catchError(async (req, res, next) => {
 })
 
 // =========================================== HighLight ====================================== //
-
 exports.getHighlight = utils.catchError(async (req, res, next) => {
 
     const highlightEvents = await repo.event.getHighlight()
@@ -305,7 +304,6 @@ module.exports.deleteHighlight = utils.catchError(async (req, res, next) => {
 })
 
 // =========================================== feedBack ====================================== //
-
 module.exports.createFeedback = utils.catchError(async (req, res, next) => {
     const { id } = req.user
     const { eventId } = req.params
