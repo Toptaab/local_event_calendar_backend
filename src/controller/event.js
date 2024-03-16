@@ -299,7 +299,7 @@ module.exports.deleteHighlight = utils.catchError(async (req, res, next) => {
         throw new CustomError("No authorize to do it", "Invalid Authorization", 401)
     }
 
-    await repo.event.deleteHighlight({ id : +eventId})
+    await repo.event.deleteHighlight({ eventId: +eventId})
 
     res.status(200).json({ message: "Remove Success" })
 })
