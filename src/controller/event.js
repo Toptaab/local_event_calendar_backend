@@ -289,7 +289,7 @@ module.exports.createHighlight = utils.catchError(async (req, res, next) => {
 
     res.status(200).json({ message: "add Success" })
 })
-
+ 
 module.exports.deleteHighlight = utils.catchError(async (req, res, next) => {
     const { id } = req.user
     const { eventId } = req.params
