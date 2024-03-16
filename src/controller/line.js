@@ -126,7 +126,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                                     uri: `${process.env.BASE_URL}/event/${value.id}`,
                                 },
                             ],
-                        }),}
+                        })}
                     )
                     const upcomingCarousel = {
                         type: "template",
