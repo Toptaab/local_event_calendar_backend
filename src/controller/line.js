@@ -17,28 +17,27 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                 case "highlight":
                     const highlight = await repo.event.getHighlight()
                     const highlightMessage = []
-                    highlight.map((value, index) => {
-                        if (index > 9) {
+                    highlight.some((value, index) => {
+                        if (index > 8) {
                             highlightMessage.push({
                                 thumbnailImageUrl: process.env.LOGOIMAGE,
                                 imageBackgroundColor: "#FFFFFF",
-                                title: `${highlight.length - 9} more`,
+                                title: `Happening Thailand`,
                                 text: " please visit our site to view more",
                                 defaultAction: {
                                     type: "uri",
                                     label: "View detail",
-                                    uri: `${process.env.BASE_URL}/profile`,
+                                    uri: `${process.env.BASE_URL}`,
                                 },
                                 actions: [
                                     {
                                         type: "uri",
                                         label: "visit site",
-                                        uri: `${process.env.BASE_URL}/profile`,
+                                        uri: `${process.env.BASE_URL}`,
                                     },
                                 ],
                             })
-
-                            return
+                            return true
                         }
                         highlightMessage.push({
                             thumbnailImageUrl: value.event.coverImage,
@@ -86,28 +85,28 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                 case "upcomming":
                     const upcoming = await repo.event.getAllUpcomimng()
                     const upcomingMessage = []
-                    upcoming.map((value,index) =>{
-                        if (index > 9) {
+                    upcoming.some((value,index) =>{
+                        if (index > 8) {
                             upcomingMessage.push({
                                 thumbnailImageUrl: process.env.LOGOIMAGE,
                                 imageBackgroundColor: "#FFFFFF",
-                                title: `${upcoming.length - 9} more`,
+                                title: `Happening Thailand`,
                                 text: " please visit our site to view more",
                                 defaultAction: {
                                     type: "uri",
                                     label: "View detail",
-                                    uri: `${process.env.BASE_URL}/profile`,
+                                    uri: `${process.env.BASE_URL}`,
                                 },
                                 actions: [
                                     {
                                         type: "uri",
                                         label: "visit site",
-                                        uri: `${process.env.BASE_URL}/profile`,
+                                        uri: `${process.env.BASE_URL}`,
                                     },
                                 ],
                             })
 
-                            return
+                            return true
                         }
                         upcomingMessage.push({
                             thumbnailImageUrl: value.coverImage,
@@ -192,11 +191,11 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                     }
                     const myEventMessage = []
                     myEvent.OrganizerInformation.Event.map((value,index) =>{
-                        if (index > 9) {
-                            myEventMessage.push({
+                        if (index > 8) {
+                            myEventMessage.some({
                                 thumbnailImageUrl: process.env.LOGOIMAGE,
                                 imageBackgroundColor: "#FFFFFF",
-                                title: `${myEvent.OrganizerInformation.Event.length - 9} more`,
+                                title: `${myEvent.OrganizerInformation.Event.length - 9} more ${myEvent.OrganizerInformation.Event.length - 9 > 1? "evetns" : "event" }`,
                                 text: " please visit our site to view more",
                                 defaultAction: {
                                     type: "uri",
@@ -212,7 +211,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                                 ],
                             })
 
-                            return
+                            return true
                         }
                         myEventMessage.push({
                             thumbnailImageUrl: value.coverImage,
@@ -299,12 +298,12 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                     }
 
                     const myReminderMessage = []
-                    myReminder.Reminder.map((value) =>{
-                        if (index > 9) {
+                    myReminder.Reminder.some((value) =>{
+                        if (index > 8) {
                             myReminderMessage.push({
                                 thumbnailImageUrl: process.env.LOGOIMAGE,
                                 imageBackgroundColor: "#FFFFFF",
-                                title: `${myReminder.Reminder.length - 9} more`,
+                                title: `${myReminder.Reminder.length - 9} more ${myReminder.Reminder.length - 9 > 1 ? "reminders" : "reminder"}`,
                                 text: " please visit our site to view more",
                                 defaultAction: {
                                     type: "uri",
@@ -320,7 +319,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                                 ],
                             })
 
-                            return
+                            return true
                         }
 
                         myReminderMessage.push({
@@ -366,7 +365,6 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                 default:
                     break
             }
-
             break
 
         default:
