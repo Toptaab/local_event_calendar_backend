@@ -158,7 +158,7 @@ module.exports.update = utils.catchError(async (req, res, next) => {
 
     // UPDATE user Address
     for (const key in userAddress) {
-        if (key !== "address" && key !== "address2" && eventAdressData[key]) {
+        if (key !== "address" && key !== "address2" && userAddress[key]) {
             userAddress[key] = +userAddress[key]
         }
     }
