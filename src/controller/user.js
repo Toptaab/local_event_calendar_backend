@@ -124,7 +124,6 @@ module.exports.update = utils.catchError(async (req, res, next) => {
     const profileImage = req.file
     const { userName, password, oldPassword, ...userAddress } = req.body
     const userData = { userName }
-    
 
     const user = await repo.user.getUser({ id: +id })
 
@@ -148,14 +147,16 @@ module.exports.update = utils.catchError(async (req, res, next) => {
     }
 
     // HASHED PASSWORD
-    const hashed = await utils.bcrypt.hashed(password)
+    if (password) {
+        const hashed = await utils.bcrypt.hashed(password)
+        userData.password = hashed
+    }
 
     // UPDATE user
-    userData.password = hashed
+
     await repo.user.update({ id: +id }, userData)
 
     // UPDATE user Address
-
     for (const key in userAddress) {
         if (key !== "address" && key !== "address2" && eventAdressData[key]) {
             userAddress[key] = +userAddress[key]
