@@ -124,6 +124,9 @@ module.exports.update = utils.catchError(async (req, res, next) => {
     const profileImage = req.file
     const { userName, password, oldPassword, ...userAddress } = req.body
     const userData = { userName }
+    
+
+    const user = await repo.user.getUser({ id: +id })
 
     // COMPARE password with database
     if (oldPassword) {
