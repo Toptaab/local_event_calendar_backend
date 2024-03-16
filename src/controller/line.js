@@ -16,14 +16,35 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                 // ========================== highlight ================================//
                 case "highlight":
                     const highlight = await repo.event.getHighlight()
-                    console.log(highlight, "=============================================")
                     const highlightMessage = []
-                    highlight.map((value) =>
+                    highlight.map((value, index) => {
+                        if (index > 9) {
+                            highlightMessage.push({
+                                thumbnailImageUrl: process.env.LOGOIMAGE,
+                                imageBackgroundColor: "#FFFFFF",
+                                title: `${highlight.length - 9} more`,
+                                text: " please visit our site to view more",
+                                defaultAction: {
+                                    type: "uri",
+                                    label: "View detail",
+                                    uri: `${process.env.BASE_URL}/profile`,
+                                },
+                                actions: [
+                                    {
+                                        type: "uri",
+                                        label: "visit site",
+                                        uri: `${process.env.BASE_URL}/profile`,
+                                    },
+                                ],
+                            })
+
+                            return
+                        }
                         highlightMessage.push({
                             thumbnailImageUrl: value.event.coverImage,
                             imageBackgroundColor: "#FFFFFF",
                             title: value.event.title,
-                            text: value.event.description.slice(0, 20) + "...",
+                            text: value.event.description.slice(0, 30) + " ...view more",
                             defaultAction: {
                                 type: "uri",
                                 label: "View detail",
@@ -36,9 +57,8 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                                     uri: `${process.env.BASE_URL}/event/${value.event.id}`,
                                 },
                             ],
-                        }),
-                    )
-                    console.log(highlightMessage, "=============================================")
+                        })
+                    })
                     const highlightCarousel = {
                         type: "template",
                         altText: "Highlight Events carousel",
@@ -53,6 +73,8 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                         to: req.body.events[0].source.userId,
                         messages: [highlightCarousel],
                     }
+
+                    console.log(highlightFlexMessage, "===================================================")
                     await axios.post("https://api.line.me/v2/bot/message/push", highlightFlexMessage, {
                         headers: {
                             "Content-Type": "application/json",
@@ -64,7 +86,29 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                 case "upcomming":
                     const upcoming = await repo.event.getAllUpcomimng()
                     const upcomingMessage = []
-                    upcoming.map((value) =>
+                    upcoming.map((value,index) =>{
+                        if (index > 9) {
+                            upcomingMessage.push({
+                                thumbnailImageUrl: process.env.LOGOIMAGE,
+                                imageBackgroundColor: "#FFFFFF",
+                                title: `${upcoming.length - 9} more`,
+                                text: " please visit our site to view more",
+                                defaultAction: {
+                                    type: "uri",
+                                    label: "View detail",
+                                    uri: `${process.env.BASE_URL}/profile`,
+                                },
+                                actions: [
+                                    {
+                                        type: "uri",
+                                        label: "visit site",
+                                        uri: `${process.env.BASE_URL}/profile`,
+                                    },
+                                ],
+                            })
+
+                            return
+                        }
                         upcomingMessage.push({
                             thumbnailImageUrl: value.coverImage,
                             imageBackgroundColor: "#FFFFFF",
@@ -82,7 +126,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                                     uri: `${process.env.BASE_URL}/event/${value.id}`,
                                 },
                             ],
-                        }),
+                        }),}
                     )
                     const upcomingCarousel = {
                         type: "template",
@@ -108,7 +152,6 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                 // ========================== myevent ================================//
                 case "myevent":
                     const myEvent = await repo.user.getUser({ lineToken: req.body.events[0].source.userId })
-
                     // ===================Guard not register or binding line user======================//
                     if (!myEvent) {
                         const inviteMessage = {
@@ -147,9 +190,30 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                             },
                         })
                     }
-
                     const myEventMessage = []
-                    myEvent.OrganizerInformation.Event.map((value) =>
+                    myEvent.OrganizerInformation.Event.map((value,index) =>{
+                        if (index > 9) {
+                            myEventMessage.push({
+                                thumbnailImageUrl: process.env.LOGOIMAGE,
+                                imageBackgroundColor: "#FFFFFF",
+                                title: `${myEvent.OrganizerInformation.Event.length - 9} more`,
+                                text: " please visit our site to view more",
+                                defaultAction: {
+                                    type: "uri",
+                                    label: "View detail",
+                                    uri: `${process.env.BASE_URL}/profile`,
+                                },
+                                actions: [
+                                    {
+                                        type: "uri",
+                                        label: "visit site",
+                                        uri: `${process.env.BASE_URL}/profile`,
+                                    },
+                                ],
+                            })
+
+                            return
+                        }
                         myEventMessage.push({
                             thumbnailImageUrl: value.coverImage,
                             imageBackgroundColor: "#FFFFFF",
@@ -167,7 +231,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                                     uri: `${process.env.BASE_URL}/event/${value.id}`,
                                 },
                             ],
-                        }),
+                        })}
                     )
                     const myEventMessageCarousel = {
                         type: "template",
@@ -235,7 +299,30 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                     }
 
                     const myReminderMessage = []
-                    myReminder.Reminder.map((value) =>
+                    myReminder.Reminder.map((value) =>{
+                        if (index > 9) {
+                            myReminderMessage.push({
+                                thumbnailImageUrl: process.env.LOGOIMAGE,
+                                imageBackgroundColor: "#FFFFFF",
+                                title: `${myReminder.Reminder.length - 9} more`,
+                                text: " please visit our site to view more",
+                                defaultAction: {
+                                    type: "uri",
+                                    label: "View detail",
+                                    uri: `${process.env.BASE_URL}/profile`,
+                                },
+                                actions: [
+                                    {
+                                        type: "uri",
+                                        label: "visit site",
+                                        uri: `${process.env.BASE_URL}/profile`,
+                                    },
+                                ],
+                            })
+
+                            return
+                        }
+
                         myReminderMessage.push({
                             thumbnailImageUrl: value.event.coverImage,
                             imageBackgroundColor: "#FFFFFF",
@@ -253,7 +340,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                                     uri: `${process.env.BASE_URL}/event/${value.event.id}`,
                                 },
                             ],
-                        }),
+                        })}
                     )
                     const myReminderMessageCarousel = {
                         type: "template",
