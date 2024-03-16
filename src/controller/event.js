@@ -292,7 +292,7 @@ module.exports.createHighlight = utils.catchError(async (req, res, next) => {
 
 module.exports.deleteHighlight = utils.catchError(async (req, res, next) => {
     const { id } = req.user
-    const { eventId } = req.body
+    const { eventId } = req.params
 
     const admin = await repo.user.getUser({ id })
     if (admin.role !== ROLE.ADMIN) {
