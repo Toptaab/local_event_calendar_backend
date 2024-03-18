@@ -298,7 +298,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                     }
 
                     const myReminderMessage = []
-                    myReminder.Reminder.some((value) =>{
+                    myReminder.Reminder.some((value,index) =>{
                         if (index > 8) {
                             myReminderMessage.push({
                                 thumbnailImageUrl: process.env.LOGOIMAGE,
