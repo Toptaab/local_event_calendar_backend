@@ -190,9 +190,9 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                         })
                     }
                     const myEventMessage = []
-                    myEvent.OrganizerInformation.Event.map((value,index) =>{
+                    myEvent.OrganizerInformation.Event.some((value,index) =>{
                         if (index > 8) {
-                            myEventMessage.some({
+                            myEventMessage.push({
                                 thumbnailImageUrl: process.env.LOGOIMAGE,
                                 imageBackgroundColor: "#FFFFFF",
                                 title: `${myEvent.OrganizerInformation.Event.length - 9} more ${myEvent.OrganizerInformation.Event.length - 9 > 1? "evetns" : "event" }`,
