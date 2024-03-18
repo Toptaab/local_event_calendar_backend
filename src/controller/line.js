@@ -42,8 +42,8 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                         highlightMessage.push({
                             thumbnailImageUrl: value.event.coverImage,
                             imageBackgroundColor: "#FFFFFF",
-                            title: value.event.title,
-                            text: value.event.description.slice(0, 30) + " ...view more",
+                            title: value.event.title.slice(0,20) + "...",
+                            text: value.event.description.slice(0, 20) + " ...view more",
                             defaultAction: {
                                 type: "uri",
                                 label: "View detail",
@@ -111,7 +111,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                         upcomingMessage.push({
                             thumbnailImageUrl: value.coverImage,
                             imageBackgroundColor: "#FFFFFF",
-                            title: value.title,
+                            title: value.title.slice(0,20) + "...",
                             text: value.description.slice(0, 20) + "...",
                             defaultAction: {
                                 type: "uri",
@@ -216,7 +216,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                         myEventMessage.push({
                             thumbnailImageUrl: value.coverImage,
                             imageBackgroundColor: "#FFFFFF",
-                            title: value.title,
+                            title: value.title.slice(0,20) + "...",
                             text: value.description.slice(0, 20) + "...",
                             defaultAction: {
                                 type: "uri",
@@ -325,7 +325,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                         myReminderMessage.push({
                             thumbnailImageUrl: value.event.coverImage,
                             imageBackgroundColor: "#FFFFFF",
-                            title: value.event.title,
+                            title: value.event.title.slice(0,20) + "...",
                             text: value.event.description.slice(0, 20) + "...",
                             defaultAction: {
                                 type: "uri",
