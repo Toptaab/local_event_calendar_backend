@@ -122,15 +122,9 @@ module.exports.register = utils.catchError(async (req, res, next) => {
 module.exports.update = utils.catchError(async (req, res, next) => {
     const { id } = req.user
     const profileImage = req.file
-    const { userName, email, password, oldPassword, ...userAddress } = req.body
-    const userData = { userName, email }
+    const { userName, password, oldPassword, ...userAddress } = req.body
+    const userData = { userName }
 
-    //GUARD
-    //VALIDATION CONFLICT email
-    const existEmail = await repo.user.getUser({ email })
-    if (existEmail) {
-        throw new CustomError("this email has aleady been used", "CONFLICT_USER", 400)
-    }
     const user = await repo.user.getUser({ id: +id })
 
     // COMPARE password with database
@@ -153,16 +147,18 @@ module.exports.update = utils.catchError(async (req, res, next) => {
     }
 
     // HASHED PASSWORD
-    const hashed = await utils.bcrypt.hashed(password)
+    if (password) {
+        const hashed = await utils.bcrypt.hashed(password)
+        userData.password = hashed
+    }
 
     // UPDATE user
-    userData.password = hashed
+
     await repo.user.update({ id: +id }, userData)
 
     // UPDATE user Address
-
     for (const key in userAddress) {
-        if (key !== "address" && key !== "address2" && eventAdressData[key]) {
+        if (key !== "address" && key !== "address2" && userAddress[key]) {
             userAddress[key] = +userAddress[key]
         }
     }
