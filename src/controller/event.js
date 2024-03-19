@@ -151,9 +151,6 @@ module.exports.getFilteredEvent = utils.catchError(async (req, res, next) => {
             where.EventFacility[value] = true
         }
     }
-    where.startDate = {
-        gt: today,
-    }
 
     const events = await repo.event.getFilteredEvent(where)
 
