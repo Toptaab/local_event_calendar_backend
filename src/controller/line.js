@@ -217,7 +217,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                             thumbnailImageUrl: value.coverImage,
                             imageBackgroundColor: "#FFFFFF",
                             title: value.title.slice(0,20) + "...",
-                            text: `Your event will start in ${daysLeft} ${daysLeft > 1 ? "Days" : "Day"} `,
+                            text: value.description.slice(0, 20) + " ...view more",
                             defaultAction: {
                                 type: "uri",
                                 label: "View detail",
@@ -326,7 +326,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                             thumbnailImageUrl: value.event.coverImage,
                             imageBackgroundColor: "#FFFFFF",
                             title: value.event.title.slice(0,20) + "...",
-                            text: value.event.description.slice(0, 20) + "...",
+                            text: `Your event will start in ${daysLeft} ${daysLeft > 1 ? "Days" : "Day"} `,
                             defaultAction: {
                                 type: "uri",
                                 label: "View detail",
