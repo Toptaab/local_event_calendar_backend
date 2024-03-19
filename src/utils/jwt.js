@@ -5,3 +5,5 @@ module.exports.sign = (payload) =>
         algorithm: process.env.JWT_ALGORITHM ?? "HS384",
         expiresIn: process.env.JWT_EXPIRES ?? "1d",
     })
+
+    module.exports.decode = (payload) => jwt.decode(payload)

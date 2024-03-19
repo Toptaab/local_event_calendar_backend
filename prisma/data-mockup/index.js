@@ -2,13 +2,15 @@ const seedData = {
     province: require("./province/provinces"),
     district: require("./province/districts"),
     subDistrict: require("./province/subdistricts"),
-    eventType: require('./eventType'),
+    category: require('./category'),
     user: require('./users'),
     organizerInformation: require('./organizerInformations'),
     event: require('./events'),
     eventAddress: require('./eventAddress'),
     eventImage: require('./eventImage'),
-    eventFacility: require('./eventFacility')
+    eventFacility: require('./eventFacility'),
+    highlight: require('./highlight'),
+    userAddress: require('./userAddress')
 }
 
 module.exports = seedData

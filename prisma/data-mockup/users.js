@@ -1,10 +1,8 @@
-const bcrypt = require("bcryptjs")
+const utils = require("../../src/utils")
 
 password = "123456"
 
-hashPassword = bcrypt.hashSync(password, 10)
-
-
+hashPassword = utils.bcrypt.hashedsync(password)
 
 const ROLE = {
     USER: "USER",
@@ -25,6 +23,7 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage: "https://thumbs.dreamstime.com/z/thailand-set-thai-color-vector-icons-symbols-vector-ill-welcome-to-illustration-87289028.jpg",
     },
     {
         userName: "pat", //2
@@ -32,6 +31,7 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage: "https://th.bing.com/th/id/OIP.pJztKQB6O2XiBOH5dYKrEAHaHS?rs=1&pid=ImgDetMain",
     },
     {
         userName: "japan", //3
@@ -39,6 +39,7 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage: "https://th.bing.com/th/id/OIP.HqU6JcRt098Mx_d4IZz9zwHaHa?w=750&h=750&rs=1&pid=ImgDetMain",
     },
     {
         userName: "guide", //4
@@ -46,13 +47,15 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage: "https://th.bing.com/th/id/OIP.DK2UEaUeOfHQwZW7B-7VSQHaH5?w=1500&h=1600&rs=1&pid=ImgDetMain",
     },
     {
         userName: "bank", //5
         email: "bank@gmail.com",
         role: ROLE.ORGANIZER,
         password: hashPassword,
-        gender: GENDER.MALE,
+        gender: GENDER.FEMALE,
+        profileImage: "https://th.bing.com/th/id/OIP.QseD9dmPTFj_wRqT19aqZQHaFu?w=1500&h=1159&rs=1&pid=ImgDetMain",
     },
     {
         userName: "pete", //6
@@ -60,5 +63,14 @@ module.exports = user = [
         role: ROLE.ORGANIZER,
         password: hashPassword,
         gender: GENDER.MALE,
+        profileImage: "https://th.bing.com/th/id/OIP.Ye6XgiE5PriIzghoTwpspAHaHa?w=300&h=300&rs=1&pid=ImgDetMain",
+    },
+    {
+        userName: "Happening Thailand",
+        email: "happening@gmail.com",
+        role: ROLE.ADMIN,
+        password: hashPassword,
+        gender: GENDER.MALE,
+        profileImage: "https://res-console.cloudinary.com/dxhpdgd6k/media_explorer_thumbnails/92901fd0dd79e5e406588814909f8e2c/detailed",
     },
 ]

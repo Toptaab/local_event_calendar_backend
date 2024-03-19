@@ -3,7 +3,7 @@ const CORPORATION = {
     CORPORATION: "CORPORATION",
 }
 
-const organizeImage = "https://download-th.com/wp-content/uploads/2020/12/TAT.jpg"
+
 const identityImage = "https://www.dmv.ca.gov/portal/uploads/2020/06/realid_img-1024x656.jpg"
 
 
@@ -11,44 +11,44 @@ const identityImage = "https://www.dmv.ca.gov/portal/uploads/2020/06/realid_img-
 module.exports = organizerInformation = [
     {
         userId: 1,
-        officialName: "Top Thailand",
+        officialName: "Top ThaiTravel",
         corporation: CORPORATION.CORPORATION,
         identityCopyImage: identityImage,
-        profileImage: organizeImage,
     },
     {
         userId: 2,
-        officialName: "Pat Thailand",
+        officialName: "Patara Event Thailand",
         corporation: CORPORATION.CORPORATION,
         identityCopyImage: identityImage,
-        profileImage: organizeImage,
     },
     {
         userId: 3,
-        officialName: "japan Thailand",
+        officialName: "Amazing Thailand",
         corporation: CORPORATION.CORPORATION,
         identityCopyImage: identityImage,
-        profileImage: organizeImage,
     },
     {
         userId: 4,
-        officialName: "guide Thailand",
+        officialName: "Navigator Thailand",
         corporation: CORPORATION.CORPORATION,
         identityCopyImage: identityImage,
-        profileImage: organizeImage,
     },
     {
         userId: 5,
-        officialName: "bank Thailand",
+        officialName: "Thailand travel friend",
         corporation: CORPORATION.CORPORATION,
         identityCopyImage: identityImage,
-        profileImage: organizeImage,
     },
     {
         userId: 6,
-        officialName: "pete Thailand",
+        officialName: "Thailand local event",
         corporation: CORPORATION.CORPORATION,
         identityCopyImage: identityImage,
-        profileImage: organizeImage,
+    },
+    {
+        userId: 7,
+        officialName: "Happening Thailand",
+        corporation: CORPORATION.CORPORATION,
+        identityCopyImage: identityImage,
     },
 ]

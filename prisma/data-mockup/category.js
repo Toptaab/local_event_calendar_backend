@@ -1,4 +1,4 @@
-module.exports = eventType = [
+module.exports = category = [
     {
         name: "Cultural ",
     },

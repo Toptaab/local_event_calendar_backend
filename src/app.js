@@ -20,6 +20,6 @@ restApiServer(app)
 
 //=====================================================Listening Zone
 console.log(`API DOCS ON:  http://${host}:${port}/docs.md`)
-server.listen(+port, host, () => {
+app.listen(+port, () => {
     console.log(`Server is running at http://${host}:${port}`)
 })
