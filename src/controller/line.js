@@ -217,7 +217,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                             thumbnailImageUrl: value.coverImage,
                             imageBackgroundColor: "#FFFFFF",
                             title: value.title.slice(0,20) + "...",
-                            text: value.description.slice(0, 20) + "...",
+                            text: `Your event will start in ${daysLeft} ${daysLeft > 1 ? "Days" : "Day"} `,
                             defaultAction: {
                                 type: "uri",
                                 label: "View detail",
