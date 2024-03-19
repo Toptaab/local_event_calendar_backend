@@ -256,8 +256,9 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                     break
                 // ========================== Reminder ================================//
                 case "myreminder":
+                    const today = new Date()
                     const myReminder = await repo.user.getUser({ lineToken: req.body.events[0].source.userId })
-
+                    
                     // ===================Guard not register or binding line user======================//
                     if (!myReminder) {
                         const inviteMessage = {
@@ -299,6 +300,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
 
                     const myReminderMessage = []
                     myReminder.Reminder.some((value,index) =>{
+                        const daysLeft = utils.timeDifference(today, value.event.startDate)
                         if (index > 8) {
                             myReminderMessage.push({
                                 thumbnailImageUrl: process.env.LOGOIMAGE,
@@ -321,7 +323,7 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
 
                             return true
                         }
-
+                        if(daysLeft > 0){
                         myReminderMessage.push({
                             thumbnailImageUrl: value.event.coverImage,
                             imageBackgroundColor: "#FFFFFF",
@@ -339,7 +341,8 @@ module.exports.lineWebhook = utils.catchError(async (req, res, next) => {
                                     uri: `${process.env.BASE_URL}/event/${value.event.id}`,
                                 },
                             ],
-                        })}
+                        })}}
+
                     )
                     const myReminderMessageCarousel = {
                         type: "template",
@@ -394,7 +397,7 @@ module.exports.pushContent = utils.catchError(async (req, res, next) => {
     let i = 0
     while (i <= reminder.length - 1) {
         if (reminder[i].user.lineToken) {
-            const daysLeft = utils.timeDifference(today, reminder[i].event.endDate)
+            const daysLeft = utils.timeDifference(today, reminder[i].event.startDate)
             const flexMessage = {
                 to: reminder[i].user.lineToken,
                 messages: [
